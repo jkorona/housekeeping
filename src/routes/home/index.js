@@ -1,5 +1,6 @@
 import { useEffect, useState } from "preact/hooks"
 import { getDutiesForDay } from "../../clients/agenda";
+import useDuties from "../../hooks/useDuties";
 import style from './style.css';
 
 /*
@@ -17,7 +18,7 @@ const Home = () => {
   const [agenda, setAgenda] = useState([]);
 
   useEffect(() => {
-    getDutiesForDay(0).then(setAgenda);
+    getDutiesForDay(1).then(setAgenda);
   }, []);
 
   return (
