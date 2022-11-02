@@ -9,7 +9,7 @@
     "dev": "preact watch",
     "lint": "eslint src",
     "test": "jest",
-    "emulators": "firebase emulators:start"
+    "emulators": "firebase emulators:start --import=./db --export-on-exit"
   },
   "eslintConfig": {
     "extends": "preact",
