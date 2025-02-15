@@ -1,3 +1,4 @@
+import { auth, signOut } from "@/auth";
 import { neon } from "@neondatabase/serverless";
 
 async function getData() {
@@ -8,5 +9,26 @@ async function getData() {
 
 export default async function Page() {
   const data = await getData();
-  return <h1>{data}</h1>;
+  const session = await auth();
+
+  return (
+    <main>
+      <h1>{data}</h1>
+      {session?.user && (
+        <div style={{ display: "flex", flexDirection: "column", padding: '2rem', gap: '1rem', alignItems: 'flex-start' }}>
+          <span>{session.user.name}</span>
+          <span>{session.user.email}</span>
+          <img alt="user" src={session.user.image!} width={100} height={100} />
+          <button
+            onClick={async () => {
+              "use server";
+              await signOut({ redirectTo: "/" });
+            }}
+          >
+            Logout
+          </button>
+        </div>
+      )}
+    </main>
+  );
 }
