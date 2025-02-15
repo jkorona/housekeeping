@@ -2,7 +2,15 @@ import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
-import { Button, Center, Fieldset, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Heading,
+  Separator,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 
 type LoginPageProps = {
   searchParams: Promise<{
@@ -14,14 +22,13 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const { callbackUrl } = await searchParams;
   return (
     <Center w="full" h="100vh">
-      <Fieldset.Root size="lg" maxW="sm" p="4" borderRadius="lg" boxShadow="lg">
-        <Stack>
-          <Fieldset.Legend>Login</Fieldset.Legend>
-          <Fieldset.HelperText>
-            Press button below to sign in with Google
-          </Fieldset.HelperText>
+      <Box maxW="sm" p="4" borderRadius="lg" boxShadow="lg">
+        <Stack mb="4">
+          <Heading>Login</Heading>
+          <Text textStyle="sm">Press button below to sign in with Google</Text>
         </Stack>
-        <Fieldset.Content>
+        <Separator />
+        <Center p="4">
           <form
             action={async () => {
               "use server";
@@ -37,13 +44,13 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               }
             }}
           >
-            <Button variant="solid" type="submit" alignSelf="center">
+            <Button variant="outline" type="submit" alignSelf="center">
               <FcGoogle />
               Sign in with Google
             </Button>
           </form>
-        </Fieldset.Content>
-      </Fieldset.Root>
+        </Center>
+      </Box>
     </Center>
   );
 }
