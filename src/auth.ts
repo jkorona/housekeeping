@@ -1,10 +1,12 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthConfig } from "next-auth";
 import google from "next-auth/providers/google";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-// import { authConfig } from "./auth.config";
 import { db } from "./db";
 
 export const authConfig = {
+  pages: {
+    signIn: "/login",
+  },
   adapter: DrizzleAdapter(db),
   providers: [
     google({
@@ -12,6 +14,19 @@ export const authConfig = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
-};
+  callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isOnProtected = !nextUrl.pathname.startsWith("/login");
+      if (isOnProtected) {
+        if (isLoggedIn) return true;
+        return false;
+      } else if (isLoggedIn) {
+        return Response.redirect(new URL("/", nextUrl));
+      }
+      return true;
+    },
+  },
+} satisfies NextAuthConfig;
 
-export const { handlers, auth, signOut } = NextAuth(authConfig);
+export const { handlers, auth, signOut, signIn } = NextAuth(authConfig);
