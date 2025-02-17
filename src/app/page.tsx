@@ -16,7 +16,7 @@ export default async function Page() {
   const session = await auth();
 
   return (
-    <Center w="full" h="100vh">
+    <Center w="100vw" h="100vh">
       <Box p="4" borderRadius="lg" boxShadow="lg">
         {session?.user && (
           <Flex gap="4">
