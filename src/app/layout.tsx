@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
-      <body>
+      <body style={{ position: "relative", minHeight: "100vh" }}>
         <Provider>{children}</Provider>
       </body>
     </html>

@@ -3,14 +3,19 @@ import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import {
-  Box,
   Button,
   Center,
+  Container,
   Heading,
+  Image,
   Separator,
   Stack,
-  Text,
 } from "@chakra-ui/react";
+import { Sigmar } from "next/font/google";
+
+const sigmar = Sigmar({
+  weight: "400",
+});
 
 type LoginPageProps = {
   searchParams: Promise<{
@@ -22,10 +27,17 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const { callbackUrl } = await searchParams;
   return (
     <Center w="full" h="100vh">
-      <Box maxW="sm" p="4" borderRadius="lg" boxShadow="lg">
+      <Container maxW="sm" p="4" borderRadius="lg" boxShadow={{ md: "lg" }}>
         <Stack mb="4">
-          <Heading>Login</Heading>
-          <Text textStyle="sm">Press button below to sign in with Google</Text>
+          <Image src="/housekeeping.png" alt="Logo" />
+          <Heading
+            textStyle="4xl"
+            color="green.600"
+            textAlign="center"
+            className={sigmar.className}
+          >
+            Housekeeping
+          </Heading>
         </Stack>
         <Separator />
         <Center p="4">
@@ -50,7 +62,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             </Button>
           </form>
         </Center>
-      </Box>
+      </Container>
     </Center>
   );
 }
