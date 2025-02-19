@@ -15,6 +15,7 @@ import { Sigmar } from "next/font/google";
 
 const sigmar = Sigmar({
   weight: "400",
+  subsets: ["latin"],
 });
 
 type LoginPageProps = {
