@@ -15,7 +15,7 @@ export default async function Navbar() {
         <Image src="/housekeeping.png" alt="Logo" boxSize="4rem" />
         <Heading
           size="md"
-          color="green.600"
+          color="green.700"
           className={sigmar.className}
           hideBelow="md"
         >

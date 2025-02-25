@@ -43,8 +43,8 @@ export const MainMenu: FC = async () => {
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle color="green.700" paddingBlock="4" fontSize="xl">
+        <DrawerHeader borderBottomWidth="1px">
+          <DrawerTitle color="green.700" paddingInline="4" fontSize="xl">
             <HStack gap="2">
               <Image
                 src="/housekeeping.png"
@@ -57,7 +57,7 @@ export const MainMenu: FC = async () => {
           </DrawerTitle>
         </DrawerHeader>
         <DrawerBody>
-          <Flex direction="column" justifyContent="flex-start">
+          <Flex direction="column">
             {links.map(({ label, icon, href }) => (
               <DrawerActionTrigger key={href} asChild>
                 <Button
@@ -65,7 +65,7 @@ export const MainMenu: FC = async () => {
                   fontSize="lg"
                   variant="ghost"
                   width="full"
-                  textAlign="left"
+                  justifyContent="flex-start"
                 >
                   <NextLink href={href}>
                     {icon}
