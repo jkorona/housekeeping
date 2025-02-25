@@ -1,4 +1,11 @@
 import Navbar from "@/components/navbar";
+import { CSSProperties } from "react";
+
+const headerStyle = {
+  position: "sticky",
+  top: 0,
+  zIndex: 1,
+} satisfies CSSProperties;
 
 export default function LoggedInLayout({
   children,
@@ -7,7 +14,7 @@ export default function LoggedInLayout({
 }>) {
   return (
     <>
-      <header style={{ position: "sticky", top: 0, zIndex: 1 }}>
+      <header style={headerStyle}>
         <Navbar />
       </header>
       <main>{children}</main>
