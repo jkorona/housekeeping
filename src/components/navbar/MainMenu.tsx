@@ -19,17 +19,20 @@ import {
   Text,
   Flex,
   Image,
-  Group,
+  Stack,
 } from "@chakra-ui/react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineSchedule } from "react-icons/ai";
 import { CgProfile } from "react-icons/cg";
-import { LuLogOut } from "react-icons/lu";
+import { LuHammer, LuLogOut } from "react-icons/lu";
+import { LiaBroomSolid } from "react-icons/lia";
 import NextLink from "next/link";
 
 const links = [
-  { label: "Members", href: "/admin/members", icon: <CgProfile /> },
   { label: "Schedule", href: "/schedule/", icon: <AiOutlineSchedule /> },
+  { label: "Members", href: "/admin/members", icon: <CgProfile /> },
+  { label: "Chores", href: "/admin/chores", icon: <LiaBroomSolid /> },
+  { label: "Editor", href: "/admin/editor", icon: <LuHammer /> },
 ];
 
 export const MainMenu: FC = async () => {
@@ -79,13 +82,18 @@ export const MainMenu: FC = async () => {
         {session?.user && (
           <DrawerFooter>
             <HStack gap="4" justifyContent="space-between" w="full">
-              <Group>
+              <HStack gap="4">
                 <Avatar.Root shape="rounded" size="md">
                   <Avatar.Fallback name={session.user.name!} />
                   <Avatar.Image src={session.user.image!} />
                 </Avatar.Root>
-                <Text>{session.user.name}</Text>
-              </Group>
+                <Stack gap="0">
+                  <Text fontWeight="medium">{session.user.name}</Text>
+                  <Text color="fg.muted" textStyle="sm">
+                    {session.user.email}
+                  </Text>
+                </Stack>
+              </HStack>
               <DrawerActionTrigger asChild>
                 <Button
                   onClick={async () => {

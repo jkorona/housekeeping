@@ -15,6 +15,7 @@ export const chores = pgTable("chores", {
 export const members = pgTable("members", {
   id: serial().primaryKey(),
   name: varchar({ length: 128 }).unique().notNull(),
+  color: varchar({ length: 7 }).notNull().default("#000000"),
 });
 
 export const weekDays = pgEnum("week_days", [

@@ -30,7 +30,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     <Center w="full" h="100vh">
       <Container maxW="sm" p="4" borderRadius="lg" boxShadow={{ md: "lg" }}>
         <Stack mb="4">
-          <Image src="/housekeeping.png" alt="Logo" />
+          <Image src="/housekeeping.png" alt="Logo" rounded="md"/>
           <Heading
             textStyle="4xl"
             color="green.600"
