@@ -1,5 +1,3 @@
-import { FC } from "react";
-
-export const WeekSchedulePage: FC = () => {
+export default function WeekSchedulePage() {
   return <div>WeekSchedulePage</div>;
-};
+}
