@@ -1,3 +1,4 @@
+import { InferInsertModel } from "drizzle-orm";
 import {
   boolean,
   date,
@@ -42,3 +43,5 @@ export const logs = pgTable("logs", {
   done: boolean().notNull(),
   skipped: boolean().notNull(),
 });
+
+export type Member = InferInsertModel<typeof members>; 

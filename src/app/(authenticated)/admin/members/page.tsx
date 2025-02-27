@@ -1,5 +1,6 @@
 import { db } from "@/db";
-import { members } from "@/db/schema/chores";
+import { eq } from "drizzle-orm";
+import { Member, members } from "@/db/schema/chores";
 import {
   Avatar,
   Box,
@@ -9,19 +10,43 @@ import {
   HStack,
   Text,
 } from "@chakra-ui/react";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdEdit, MdAdd } from "react-icons/md";
 import { EditButton } from "./EditButton";
-
-export const dynamic = "force-dynamic"; // Forces dynamic rendering
+import { revalidatePath } from "next/cache";
 
 export default async function MembersPage() {
   const results = await db.select().from(members);
 
+  const updateMember = async (member: Member) => {
+    "use server";
+    await db.update(members).set(member).where(eq(members.id, member.id!));
+    revalidatePath("/admin/members");
+  };
+
+  const createMemeber = async (member: Member) => {
+    "use server";
+    await db.insert(members).values(member);
+    revalidatePath("/admin/members");
+  };
+
+  const removeMember = async (id: number) => {
+    "use server";
+    await db.delete(members).where(eq(members.id, id));
+    revalidatePath("/admin/members");
+  };
+
   return (
     <Box lg={{ maxW: "1024px", mx: "auto" }} my={4} px={4}>
-      <Heading as="h1" size="3xl">
-        Members
-      </Heading>
+      <HStack justifyContent="space-between" paddingInline={4}>
+        <Heading as="h1" size="3xl">
+          Members
+        </Heading>
+        <EditButton
+          title="Add new member"
+          icon={<MdAdd />}
+          onSave={createMemeber}
+        />
+      </HStack>
       <Flex direction="column" gap={2} mt={8}>
         {results.length === 0 && <Box>No members found</Box>}
         {results.map((member) => (
@@ -32,7 +57,7 @@ export default async function MembersPage() {
             gap={4}
             _hover={{ boxShadow: "lg" }}
           >
-            <Avatar.Root colorPalette={member.color}>
+            <Avatar.Root bg={member.color}>
               <Avatar.Fallback name={member.name} />
             </Avatar.Root>
             <Text textStyle="lg">{member.name}</Text>
@@ -42,8 +67,16 @@ export default async function MembersPage() {
               w="full"
               gap="2"
             >
-              <EditButton id={member.id} />
-              <Button variant="subtle">
+              <EditButton
+                value={member}
+                title="Edit member"
+                icon={<MdEdit />}
+                onSave={updateMember}
+              />
+              <Button
+                variant="subtle"
+                onClick={removeMember.bind(null, member.id)}
+              >
                 <MdDelete />
               </Button>
             </HStack>
