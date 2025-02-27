@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Button } from "@chakra-ui/react";
+import { Button, Fieldset, HStack, Input, parseColor } from "@chakra-ui/react";
 import {
   DialogActionTrigger,
   DialogBody,
@@ -9,19 +9,46 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Field } from "@/components/ui/field";
+import {
+  ColorPickerArea,
+  ColorPickerContent,
+  ColorPickerControl,
+  ColorPickerEyeDropper,
+  ColorPickerInput,
+  ColorPickerRoot,
+  ColorPickerSliders,
+  ColorPickerTrigger,
+} from "@/components/ui/color-picker";
 
 export const EditModal: FC = () => (
-  <DialogContent
-    minH={["100vh", "unset"]}
-    marginBlock={[0, 16]}
-  >
+  <DialogContent minH={["100vh", "unset"]} marginBlock={[0, 16]}>
     <DialogHeader>
-      <DialogTitle>Dialog Title</DialogTitle>
+      <DialogTitle>Add new member</DialogTitle>
     </DialogHeader>
     <DialogBody>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
-      fermentum nunc. Nullam auctor, nunc nec ultricies ultricies, nunc elit
-      ultricies nunc, nec ultricies nunc nunc nec elit.
+      <Fieldset.Root>
+        <Fieldset.Content>
+          <Field label="Name" required>
+            <Input name="name" />
+          </Field>
+          <Field label="Color" required>
+            <ColorPickerRoot defaultValue={parseColor("#eb5e41")}>
+              <ColorPickerControl>
+                <ColorPickerTrigger />
+                <ColorPickerInput w="full"/>
+              </ColorPickerControl>
+              <ColorPickerContent zIndex={1000000}>
+                <ColorPickerArea />
+                <HStack>
+                  <ColorPickerEyeDropper />
+                  <ColorPickerSliders />
+                </HStack>
+              </ColorPickerContent>
+            </ColorPickerRoot>
+          </Field>
+        </Fieldset.Content>
+      </Fieldset.Root>
     </DialogBody>
     <DialogFooter>
       <DialogActionTrigger asChild>

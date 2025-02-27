@@ -9,7 +9,10 @@ import {
   HStack,
   Text,
 } from "@chakra-ui/react";
-import { MdEdit, MdDelete } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
+import { EditButton } from "./EditButton";
+
+export const dynamic = "force-dynamic"; // Forces dynamic rendering
 
 export default async function MembersPage() {
   const results = await db.select().from(members);
@@ -39,9 +42,7 @@ export default async function MembersPage() {
               w="full"
               gap="2"
             >
-              <Button variant="outline">
-                <MdEdit />
-              </Button>
+              <EditButton id={member.id} />
               <Button variant="subtle">
                 <MdDelete />
               </Button>
