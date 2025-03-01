@@ -9,4 +9,6 @@ export enum ColorPalette {
   Cyan = "cyan",
   Purple = "purple",
   Pink = "pink",
-};
+}
+
+export const colorPalette: ColorPalette[] = Object.values(ColorPalette);

@@ -1,18 +1,10 @@
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
 import { Member, members } from "@/db/schema/chores";
-import {
-  Avatar,
-  Box,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Text,
-} from "@chakra-ui/react";
+import { Avatar, Button, Flex, GridItem, HStack, Text } from "@chakra-ui/react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { MdDelete, MdEdit, MdAdd } from "react-icons/md";
-import { EditButton } from "./EditButton";
+import { EditButton } from "./components/EditButton";
 import { revalidatePath } from "next/cache";
 
 export default async function MembersPage() {
@@ -37,53 +29,52 @@ export default async function MembersPage() {
   };
 
   return (
-    <Box lg={{ maxW: "1024px", mx: "auto" }} my={4} px={4}>
-      <HStack justifyContent="space-between" paddingInline={4}>
-        <Heading as="h1" size="3xl">
-          Members
-        </Heading>
+    <>
+      <GridItem gridArea="add" justifySelf="flex-end" pr={4}>
         <EditButton
           title="Add new member"
           icon={<MdAdd />}
           onSave={createMemeber}
         />
-      </HStack>
-      <Flex direction="column" gap={2} mt={8}>
-        {results.length === 0 && <EmptyState />}
-        {results.map((member) => (
-          <HStack
-            key={member.id}
-            boxShadow="md"
-            p={4}
-            gap={4}
-            _hover={{ boxShadow: "lg" }}
-          >
-            <Avatar.Root bg={member.color}>
-              <Avatar.Fallback name={member.name} />
-            </Avatar.Root>
-            <Text textStyle="lg">{member.name}</Text>
+      </GridItem>
+      <GridItem gridArea="content" asChild>
+        <Flex direction="column" gap={2} mt={8}>
+          {results.length === 0 && <EmptyState />}
+          {results.map((member) => (
             <HStack
-              justifyContent="flex-end"
-              alignItems="flex-end"
-              w="full"
-              gap="2"
+              key={member.id}
+              boxShadow="md"
+              p={4}
+              gap={4}
+              _hover={{ boxShadow: "lg" }}
             >
-              <EditButton
-                value={member}
-                title="Edit member"
-                icon={<MdEdit />}
-                onSave={updateMember}
-              />
-              <Button
-                variant="subtle"
-                onClick={removeMember.bind(null, member.id)}
+              <Avatar.Root colorPalette={member.color}>
+                <Avatar.Fallback name={member.name} />
+              </Avatar.Root>
+              <Text textStyle="lg">{member.name}</Text>
+              <HStack
+                justifyContent="flex-end"
+                alignItems="flex-end"
+                w="full"
+                gap="2"
               >
-                <MdDelete />
-              </Button>
+                <EditButton
+                  value={member}
+                  title="Edit member"
+                  icon={<MdEdit />}
+                  onSave={updateMember}
+                />
+                <Button
+                  variant="subtle"
+                  onClick={removeMember.bind(null, member.id)}
+                >
+                  <MdDelete />
+                </Button>
+              </HStack>
             </HStack>
-          </HStack>
-        ))}
-      </Flex>
-    </Box>
+          ))}
+        </Flex>
+      </GridItem>
+    </>
   );
 }

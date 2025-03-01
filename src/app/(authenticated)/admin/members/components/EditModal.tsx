@@ -1,5 +1,5 @@
 import { FC, FormEvent } from "react";
-import { Button, Fieldset, HStack, Input, parseColor } from "@chakra-ui/react";
+import { Button, Fieldset, Input } from "@chakra-ui/react";
 import {
   DialogActionTrigger,
   DialogBody,
@@ -10,18 +10,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
-import {
-  ColorPickerArea,
-  ColorPickerContent,
-  ColorPickerControl,
-  ColorPickerEyeDropper,
-  ColorPickerInput,
-  ColorPickerRoot,
-  ColorPickerSliders,
-  ColorPickerTrigger,
-} from "@/components/ui/color-picker";
 import { Member } from "@/db/schema/chores";
 import { useFormStatus } from "react-dom";
+import { ColorPalette } from "@/model/ColorPalette";
+import { ColorSelect } from "@/components/ui/color-select";
 
 export type EditModalProps = {
   title: string;
@@ -62,21 +54,13 @@ export const EditModal: FC<EditModalProps> = ({ title, value, onSave }) => {
                 <Input name="name" defaultValue={value?.name} required />
               </Field>
               <Field label="Color" required>
-                <ColorPickerRoot
-                  defaultValue={parseColor(value?.color ?? "#eb5e41")}
-                >
-                  <ColorPickerControl w="full">
-                    <ColorPickerTrigger />
-                    <ColorPickerInput name="color" w="full" required />
-                  </ColorPickerControl>
-                  <ColorPickerContent zIndex={100000}>
-                    <ColorPickerArea />
-                    <HStack>
-                      <ColorPickerEyeDropper />
-                      <ColorPickerSliders />
-                    </HStack>
-                  </ColorPickerContent>
-                </ColorPickerRoot>
+                <ColorSelect
+                  name="color"
+                  defaultValue={
+                    value?.color ? [value.color as ColorPalette] : undefined
+                  }
+                  required
+                />
               </Field>
             </Fieldset.Content>
           </Fieldset.Root>
