@@ -10,6 +10,7 @@ import {
   HStack,
   Text,
 } from "@chakra-ui/react";
+import { EmptyState } from "@/components/ui/empty-state";
 import { MdDelete, MdEdit, MdAdd } from "react-icons/md";
 import { EditButton } from "./EditButton";
 import { revalidatePath } from "next/cache";
@@ -48,7 +49,7 @@ export default async function MembersPage() {
         />
       </HStack>
       <Flex direction="column" gap={2} mt={8}>
-        {results.length === 0 && <Box>No members found</Box>}
+        {results.length === 0 && <EmptyState />}
         {results.map((member) => (
           <HStack
             key={member.id}
