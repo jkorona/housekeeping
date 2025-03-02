@@ -1,11 +1,12 @@
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
 import { Member, members } from "@/db/schema/chores";
-import { Avatar, Button, Flex, GridItem, HStack, Text } from "@chakra-ui/react";
+import { Avatar, Flex, GridItem, HStack, Text } from "@chakra-ui/react";
 import { EmptyState } from "@/components/ui/empty-state";
-import { MdDelete, MdEdit, MdAdd } from "react-icons/md";
+import { MdEdit, MdAdd } from "react-icons/md";
 import { EditButton } from "./components/EditButton";
 import { revalidatePath } from "next/cache";
+import { DeleteButton } from "./components/DeleteButton";
 
 export default async function MembersPage() {
   const results = await db.select().from(members);
@@ -64,12 +65,7 @@ export default async function MembersPage() {
                   icon={<MdEdit />}
                   onSave={updateMember}
                 />
-                <Button
-                  variant="subtle"
-                  onClick={removeMember.bind(null, member.id)}
-                >
-                  <MdDelete />
-                </Button>
+                <DeleteButton id={member.id!} onClick={removeMember} />
               </HStack>
             </HStack>
           ))}
