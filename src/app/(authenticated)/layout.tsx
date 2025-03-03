@@ -1,4 +1,4 @@
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navs/Navbar";
 import { CSSProperties } from "react";
 
 const headerStyle = {

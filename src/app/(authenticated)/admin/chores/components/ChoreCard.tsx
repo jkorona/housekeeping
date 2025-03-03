@@ -21,10 +21,10 @@ export const ChoreCard: FC<ChoreCardProps> = ({ chore, onUpdate }) => {
       alignItems="flex-start"
     >
       <Stack gap={2}>
-        <Text textStyle="lg" whiteSpace="nowrap">
+        <Text textStyle="lg">
           {chore.name}
         </Text>
-        <Text textStyle="xs">{chore.description}</Text>
+        <Text textStyle="xs" hideBelow="md">{chore.description}</Text>
       </Stack>
       <HStack justifyContent="flex-end" alignItems="flex-end" w="full" gap="2">
         <EditButton
