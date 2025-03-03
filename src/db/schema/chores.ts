@@ -45,3 +45,4 @@ export const logs = pgTable("logs", {
 });
 
 export type Member = InferInsertModel<typeof members>; 
+export type Chore = InferInsertModel<typeof chores>;
