@@ -1,5 +1,5 @@
 import { FC, FormEvent } from "react";
-import { Button, Fieldset, Input } from "@chakra-ui/react";
+import { Button, Fieldset, Group, Input, InputAddon } from "@chakra-ui/react";
 import {
   DialogActionTrigger,
   DialogBody,
@@ -37,8 +37,9 @@ export const EditModal: FC<EditModalProps> = ({ title, value, onSave }) => {
 
     const name = formData.get("name") as string;
     const color = formData.get("color") as string;
+    const rate = parseInt(formData.get("rate") as string, 10);
 
-    onSave({ id: value?.id, name, color });
+    onSave({ id: value?.id, name, color, rate });
   };
 
   return (
@@ -61,6 +62,12 @@ export const EditModal: FC<EditModalProps> = ({ title, value, onSave }) => {
                   }
                   required
                 />
+              </Field>
+              <Field label="Weekly Rate" required>
+                <Group attached w="full">
+                  <InputAddon>PLN</InputAddon>
+                  <Input name="rate" type="number" defaultValue={value?.rate} />
+                </Group>
               </Field>
             </Fieldset.Content>
           </Fieldset.Root>
