@@ -1,5 +1,5 @@
-import { EmptyState as ChakraEmptyState } from "@chakra-ui/react";
 import { FC } from "react";
+import { EmptyState as ChakraEmptyState } from "@chakra-ui/react";
 import { LuPackageSearch } from "react-icons/lu";
 
 export type EmptyStateProps = {

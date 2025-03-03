@@ -65,7 +65,7 @@ export default async function MembersPage() {
                   icon={<MdEdit />}
                   onSave={updateMember}
                 />
-                <DeleteButton id={member.id!} onClick={removeMember} />
+                <DeleteButton member={member} onDelete={removeMember} />
               </HStack>
             </HStack>
           ))}
