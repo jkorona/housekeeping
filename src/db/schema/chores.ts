@@ -6,17 +6,21 @@ import {
   pgTable,
   serial,
   varchar,
+  text,
+  integer,
 } from "drizzle-orm/pg-core";
 
 export const chores = pgTable("chores", {
   id: serial().primaryKey(),
   name: varchar({ length: 512 }).unique().notNull(),
+  description: text(),
 });
 
 export const members = pgTable("members", {
   id: serial().primaryKey(),
   name: varchar({ length: 128 }).unique().notNull(),
   color: varchar({ length: 7 }).notNull().default("#000000"),
+  rate: integer().notNull().default(1),
 });
 
 export const weekDays = pgEnum("week_days", [
