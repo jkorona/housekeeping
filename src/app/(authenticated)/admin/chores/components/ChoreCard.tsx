@@ -3,6 +3,7 @@ import { Chore } from "@/db/schema/chores";
 import { Grid, HStack, Stack, Text } from "@chakra-ui/react";
 import { EditButton } from "./EditButton";
 import { MdEdit } from "react-icons/md";
+import { DeleteButton } from "./DeleteButton";
 
 type ChoreCardProps = PropsWithChildren<{
   chore: Chore;
@@ -10,7 +11,7 @@ type ChoreCardProps = PropsWithChildren<{
   onRemove: (id: number) => Promise<void>;
 }>;
 
-export const ChoreCard: FC<ChoreCardProps> = ({ chore, onUpdate }) => {
+export const ChoreCard: FC<ChoreCardProps> = ({ chore, onUpdate, onRemove }) => {
   return (
     <Grid
       boxShadow="md"
@@ -18,22 +19,22 @@ export const ChoreCard: FC<ChoreCardProps> = ({ chore, onUpdate }) => {
       gap={4}
       _hover={{ boxShadow: "lg" }}
       templateColumns="1fr min-content"
-      alignItems="flex-start"
+      alignItems={["center", "center", "flex-start"]}
     >
-      <Stack gap={2}>
+      <Stack>
         <Text textStyle="lg">
           {chore.name}
         </Text>
         <Text textStyle="xs" hideBelow="md">{chore.description}</Text>
       </Stack>
-      <HStack justifyContent="flex-end" alignItems="flex-end" w="full" gap="2">
+      <HStack gap="2">
         <EditButton
           value={chore}
           title="Edit member"
           icon={<MdEdit />}
           onSave={onUpdate}
         />
-        {/* <DeleteButton member={member} onDelete={onRemove} /> */}
+        <DeleteButton chore={chore} onDelete={onRemove} />
       </HStack>
     </Grid>
   );
