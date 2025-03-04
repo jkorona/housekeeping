@@ -9,7 +9,6 @@ export type ChoreSelectProps = {
 export const ChoreSelect: FC<ChoreSelectProps> = ({ values }) => (
   <NativeSelect.Root size="xs" variant="plain">
     <NativeSelect.Field paddingInline={2} whiteSpace="normal" placeholder="Not selected" height="fit-content">
-      <option value=""></option>
       {values.map(({ id, name }) => (
         <option key={id} value={id}>
           {name}
