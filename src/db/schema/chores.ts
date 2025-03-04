@@ -48,5 +48,6 @@ export const logs = pgTable("logs", {
   skipped: boolean().notNull(),
 });
 
-export type Member = InferInsertModel<typeof members>; 
+export type Member = InferInsertModel<typeof members>;
 export type Chore = InferInsertModel<typeof chores>;
+export const weekDaysList = weekDays.enumValues;

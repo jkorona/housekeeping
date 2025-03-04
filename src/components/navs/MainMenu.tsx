@@ -29,10 +29,10 @@ import { LiaBroomSolid } from "react-icons/lia";
 import NextLink from "next/link";
 
 const links = [
-  { label: "Schedule", href: "/schedule/", icon: <AiOutlineSchedule /> },
+  { label: "Logbook", href: "/schedule/", icon: <AiOutlineSchedule /> },
   { label: "Members", href: "/admin/members", icon: <CgProfile /> },
   { label: "Chores", href: "/admin/chores", icon: <LiaBroomSolid /> },
-  { label: "Editor", href: "/admin/editor", icon: <LuHammer /> },
+  { label: "Schedule", href: "/admin/schedule", icon: <LuHammer /> },
 ];
 
 export const MainMenu: FC = async () => {
