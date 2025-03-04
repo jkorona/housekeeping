@@ -10,7 +10,12 @@ const sigmar = Sigmar({
 
 export default async function Navbar() {
   return (
-    <Flex maxHeight="4rem" boxShadow="lg" justifyContent="space-between">
+    <Flex
+      maxHeight="4rem"
+      boxShadow="lg"
+      justifyContent="space-between"
+      bg="var(--chakra-colors-bg-panel)"
+    >
       <HStack gap="4">
         <Image src="/housekeeping.png" alt="Logo" boxSize="4rem" />
         <Heading
