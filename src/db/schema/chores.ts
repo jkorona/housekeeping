@@ -8,6 +8,7 @@ import {
   varchar,
   text,
   integer,
+  primaryKey,
 } from "drizzle-orm/pg-core";
 
 export const chores = pgTable("chores", {
@@ -33,16 +34,19 @@ export const weekDays = pgEnum("week_days", [
   "sunday",
 ]);
 
-export const schedules = pgTable("schedules", {
-  id: serial().primaryKey(),
-  memberId: serial().references(() => members.id),
-  choreId: serial().references(() => chores.id),
-  weekDay: weekDays().notNull(),
-});
+export const assignments = pgTable(
+  "assignments",
+  {
+    memberId: integer('member_id').references(() => members.id),
+    choreId: integer('chore_id').references(() => chores.id),
+    weekDay: weekDays('week_day').notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.memberId, table.weekDay] })]
+);
 
 export const logs = pgTable("logs", {
   id: serial().primaryKey(),
-  scheduleId: serial().references(() => schedules.id),
+  // scheduleId: serial().references(() => schedules.),
   date: date({ mode: "string" }).notNull(),
   done: boolean().notNull(),
   skipped: boolean().notNull(),
@@ -50,4 +54,6 @@ export const logs = pgTable("logs", {
 
 export type Member = InferInsertModel<typeof members>;
 export type Chore = InferInsertModel<typeof chores>;
+export type Assignment = InferInsertModel<typeof assignments>;
 export const weekDaysList = weekDays.enumValues;
+export type WeekDay = (typeof weekDaysList)[number];
