@@ -20,8 +20,9 @@ export const chores = pgTable("chores", {
 export const members = pgTable("members", {
   id: serial().primaryKey(),
   name: varchar({ length: 128 }).unique().notNull(),
-  color: varchar({ length: 7 }).notNull().default("#000000"),
+  color: varchar({ length: 7 }).notNull().default("green"),
   rate: integer().notNull().default(1),
+  dateOfBirth: date('date_of_birth', { mode: "string" }).notNull().default('2020-01-01'),
 });
 
 export const weekDays = pgEnum("week_days", [
@@ -37,9 +38,13 @@ export const weekDays = pgEnum("week_days", [
 export const assignments = pgTable(
   "assignments",
   {
-    memberId: integer('member_id').references(() => members.id),
-    choreId: integer('chore_id').references(() => chores.id),
-    weekDay: weekDays('week_day').notNull(),
+    memberId: integer("member_id")
+      .notNull()
+      .references(() => members.id),
+    choreId: integer("chore_id")
+      .notNull()
+      .references(() => chores.id),
+    weekDay: weekDays("week_day").notNull(),
   },
   (table) => [primaryKey({ columns: [table.memberId, table.weekDay] })]
 );

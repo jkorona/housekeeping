@@ -14,6 +14,11 @@ import { Member } from "@/db/schema/chores";
 import { useFormStatus } from "react-dom";
 import { ColorPalette } from "@/model/ColorPalette";
 import { ColorSelect } from "@/components/ui/color-select";
+import {
+  NumberInputField,
+  NumberInputRoot,
+} from "@/components/ui/number-input";
+import { format } from "date-fns";
 
 export type EditModalProps = {
   title: string;
@@ -38,8 +43,9 @@ export const EditModal: FC<EditModalProps> = ({ title, value, onSave }) => {
     const name = formData.get("name") as string;
     const color = formData.get("color") as string;
     const rate = parseInt(formData.get("rate") as string, 10);
+    const dateOfBirth = formData.get("dateOfBirth") as string;
 
-    onSave({ id: value?.id, name, color, rate });
+    onSave({ id: value?.id, name, color, rate, dateOfBirth });
   };
 
   return (
@@ -54,6 +60,17 @@ export const EditModal: FC<EditModalProps> = ({ title, value, onSave }) => {
               <Field label="Name" required>
                 <Input name="name" defaultValue={value?.name} required />
               </Field>
+              <Field label="Date of birth" required>
+                <Input
+                  type="date"
+                  min="2000-01-01"
+                  max={format(Date.now(), "yyyy-MM-dd")}
+                  name="dateOfBirth"
+                  defaultValue={value?.dateOfBirth}
+                  placeholder={""}
+                  required
+                />
+              </Field>
               <Field label="Color" required>
                 <ColorSelect
                   name="color"
@@ -66,7 +83,14 @@ export const EditModal: FC<EditModalProps> = ({ title, value, onSave }) => {
               <Field label="Weekly Rate" required>
                 <Group attached w="full">
                   <InputAddon>PLN</InputAddon>
-                  <Input name="rate" type="number" defaultValue={value?.rate} />
+                  <NumberInputRoot
+                    name="rate"
+                    defaultValue={`${value?.rate ?? "0"}`}
+                    min={0}
+                    w="full"
+                  >
+                    <NumberInputField />
+                  </NumberInputRoot>
                 </Group>
               </Field>
             </Fieldset.Content>

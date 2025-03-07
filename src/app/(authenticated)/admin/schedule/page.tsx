@@ -1,3 +1,4 @@
+import { asc } from "drizzle-orm";
 import { db } from "@/db";
 import {
   assignments,
@@ -10,8 +11,10 @@ import { Table, Tag } from "@chakra-ui/react";
 import { ChoreSelect } from "./components/ChoreSelect";
 import { fetchAssignments } from "@/db/actions/fetchAssignments";
 
+const workingDays = weekDaysList.slice(0, -1);
+
 export default async function SchedulePage() {
-  const membersList = await db.select().from(members);
+  const membersList = await db.select().from(members).orderBy(asc(members.dateOfBirth));
   const choresList = await db.select().from(chores);
   const schedule = await fetchAssignments();
 
@@ -42,7 +45,7 @@ export default async function SchedulePage() {
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeader></Table.ColumnHeader>
-          {weekDaysList.map((day) => (
+          {workingDays.map((day) => (
             <Table.ColumnHeader
               key={`header_${day}`}
               paddingInline={5}
@@ -66,7 +69,7 @@ export default async function SchedulePage() {
                 <Tag.Label>{member.name}</Tag.Label>
               </Tag.Root>
             </Table.Cell>
-            {weekDaysList.map((day) => (
+            {workingDays.map((day) => (
               <Table.Cell key={`${member.name}_${day}`}>
                 <ChoreSelect
                   options={choresList}
