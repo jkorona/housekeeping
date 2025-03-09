@@ -6,7 +6,7 @@ import { NativeSelect } from "@chakra-ui/react";
 export type ChoreSelectProps = {
   options: Chore[];
   value: number;
-  onChange: (choreId: number) => Promise<void>;
+  onChange?: (choreId: number) => void;
 };
 
 export const ChoreSelect: FC<ChoreSelectProps> = ({ value, options, onChange }) => (
@@ -17,7 +17,7 @@ export const ChoreSelect: FC<ChoreSelectProps> = ({ value, options, onChange }) 
       placeholder="Not selected"
       height="fit-content"
       defaultValue={value}
-      onChange={(e) => onChange(+e.currentTarget.value)}
+      onChange={(e) => onChange?.(+e.currentTarget.value)}
     >
       {options.map(({ id, name }) => (
         <option key={id} value={id}>
