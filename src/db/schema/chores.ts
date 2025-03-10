@@ -22,7 +22,9 @@ export const members = pgTable("members", {
   name: varchar({ length: 128 }).unique().notNull(),
   color: varchar({ length: 7 }).notNull().default("green"),
   rate: integer().notNull().default(1),
-  dateOfBirth: date('date_of_birth', { mode: "string" }).notNull().default('2020-01-01'),
+  dateOfBirth: date("date_of_birth", { mode: "string" })
+    .notNull()
+    .default("2020-01-01"),
 });
 
 export const weekDays = pgEnum("week_days", [
@@ -49,16 +51,22 @@ export const assignments = pgTable(
   (table) => [primaryKey({ columns: [table.memberId, table.weekDay] })]
 );
 
-export const logs = pgTable("logs", {
-  id: serial().primaryKey(),
-  // scheduleId: serial().references(() => schedules.),
-  date: date({ mode: "string" }).notNull(),
-  done: boolean().notNull(),
-  skipped: boolean().notNull(),
-});
+export const logs = pgTable(
+  "logs",
+  {
+    memberId: integer("member_id")
+      .notNull()
+      .references(() => members.id),
+    date: date({ mode: "string" }).notNull(),
+    done: boolean().notNull(),
+    skip: boolean().notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.memberId, table.date] })]
+);
 
 export type Member = InferInsertModel<typeof members>;
 export type Chore = InferInsertModel<typeof chores>;
 export type Assignment = InferInsertModel<typeof assignments>;
 export const weekDaysList = weekDays.enumValues;
 export type WeekDay = (typeof weekDaysList)[number];
+export type Log = InferInsertModel<typeof logs>;

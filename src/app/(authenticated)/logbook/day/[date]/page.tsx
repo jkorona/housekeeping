@@ -6,8 +6,9 @@ type DaySchedulePageProps = {
 
 export default async function DaySchedulePage({ params }: DaySchedulePageProps) {
   const { date } = await params;
+  
   return (
-    <Center w="100vw" h="100vh">
+    <Center>
       <Box p="4" borderRadius="lg" boxShadow="lg">
         <Text>Day Schedule: {date}</Text>
       </Box>
