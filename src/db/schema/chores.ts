@@ -1,4 +1,4 @@
-import { InferInsertModel } from "drizzle-orm";
+import { InferInsertModel, relations } from "drizzle-orm";
 import {
   boolean,
   date,
@@ -50,6 +50,17 @@ export const assignments = pgTable(
   },
   (table) => [primaryKey({ columns: [table.memberId, table.weekDay] })]
 );
+
+export const assignmentsRelations = relations(assignments, ({ one }) => ({
+  member: one(members, {
+    fields: [assignments.memberId],
+    references: [members.id],
+  }),
+  chore: one(chores, {
+    fields: [assignments.choreId],
+    references: [chores.id],
+  }),
+}));
 
 export const logs = pgTable(
   "logs",
