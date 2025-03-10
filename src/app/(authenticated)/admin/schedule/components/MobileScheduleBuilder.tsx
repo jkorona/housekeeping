@@ -24,12 +24,12 @@ export const MobileScheduleBuilder: FC<MobileScheduleBuilderProps> = ({
     <Grid gridTemplateColumns="min-content 1fr" hideFrom="md">
       <GridItem
         padding="3"
-        borderBottomWidth="thick"
+        borderBottomWidth="medium"
         borderBottomColor="green.700"
       />
       <GridItem
         padding="3"
-        borderBottomWidth="thick"
+        borderBottomWidth="medium"
         borderBottomColor="green.700"
       >
         <WeekdaySwitcher day={currentDay} onChange={setCurrentDay} />
@@ -46,7 +46,12 @@ export const MobileScheduleBuilder: FC<MobileScheduleBuilderProps> = ({
               <Tag.Label>{member.name}</Tag.Label>
             </Tag.Root>
           </GridItem>
-          <GridItem padding="3" alignSelf="center">
+          <GridItem
+            padding="3"
+            alignSelf="center"
+            animationName="fade-in, fade-out"
+            animationDuration="slow"
+          >
             <ChoreSelect
               options={chores}
               value={schedule[currentDay][member.id!]}
