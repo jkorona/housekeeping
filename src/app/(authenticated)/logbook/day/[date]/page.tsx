@@ -6,6 +6,7 @@ import { Fragment } from "react";
 import { DateSwitcher } from "./components/DateSwitcher";
 import { redirect } from "next/navigation";
 import { LogControls } from "./components/LogControls";
+import { revalidatePath } from "next/cache";
 
 type DaySchedulePageProps = {
   params: Promise<{ date: string }>;
@@ -78,6 +79,7 @@ export default async function DaySchedulePage({
                       target: [logs.date, logs.memberId],
                       set: { done },
                     });
+                    revalidatePath(`/logbook/day/${date}`);
                 }}
               />
             </HStack>
