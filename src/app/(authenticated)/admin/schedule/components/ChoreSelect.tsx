@@ -9,10 +9,18 @@ export type ChoreSelectProps = {
   onChange?: (choreId: number) => void;
 };
 
-export const ChoreSelect: FC<ChoreSelectProps> = ({ value, options, onChange }) => (
-  <NativeSelect.Root size="xs" variant="plain">
+export const ChoreSelect: FC<ChoreSelectProps> = ({
+  value,
+  options,
+  onChange,
+}) => (
+  <NativeSelect.Root
+    size={["md", "md", "xs"]}
+    variant={["subtle", "subtle", "plain"]}
+  >
     <NativeSelect.Field
       paddingInline={2}
+      paddingBlock={1}
       whiteSpace="normal"
       placeholder="Not selected"
       height="fit-content"
