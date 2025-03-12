@@ -1,25 +1,29 @@
 "use client";
 
-import { FC } from "react";
-import { Button, Grid, GridItem, Heading } from "@chakra-ui/react";
+import { ChangeEvent, FC, useRef } from "react";
+import { Button, Grid, GridItem, Heading, Input } from "@chakra-ui/react";
 import { LuArrowLeft, LuArrowRight } from "react-icons/lu";
-import { addDays, format, isToday, subDays } from "date-fns";
+import { addDays, format, isToday, parse, subDays } from "date-fns";
 
 export type WeekdaySwitcherProps = {
   date: Date;
   onChange: (date: Date) => void;
 };
 
-export const DateSwitcher: FC<WeekdaySwitcherProps> = ({
-  date,
-  onChange,
-}) => {
+const DATE_FORMAT = "yyyy-MM-dd";
+
+export const DateSwitcher: FC<WeekdaySwitcherProps> = ({ date, onChange }) => {
+  const dateInputRef = useRef<HTMLInputElement>(null);
 
   const handlePrevDay = () => {
     onChange(subDays(date, 1));
   };
   const handleNextDay = () => {
     onChange(addDays(date, 1));
+  };
+  const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const dateString = e.target.value;
+    onChange(parse(dateString, DATE_FORMAT, new Date()));
   };
 
   return (
@@ -38,9 +42,29 @@ export const DateSwitcher: FC<WeekdaySwitcherProps> = ({
           <LuArrowLeft />
         </Button>
       </GridItem>
-      <GridItem justifySelf="center" asChild>
-        <Heading size={{ base: "lg", mdDown: 'md'}} textTransform="capitalize">
-          {format(date, 'cccc dd MMMM yyyy')}
+      <GridItem
+        justifySelf="center"
+        position="relative"
+        _hover={{ textDecoration: "underline" }}
+      >
+        <Input
+          type="date"
+          value={format(date, DATE_FORMAT)}
+          max={format(new Date(), DATE_FORMAT)}
+          ref={dateInputRef}
+          visibility="hidden"
+          position="absolute"
+          top="8"
+          h="0"
+          onChange={handleDateChange}
+        />
+        <Heading
+          position="relative"
+          size={{ base: "lg", mdDown: "md" }}
+          textTransform="capitalize"
+          onClick={() => dateInputRef.current?.showPicker()}
+        >
+          {format(date, "cccc dd MMMM yyyy")}
         </Heading>
       </GridItem>
       <GridItem justifySelf="flex-end" asChild>
