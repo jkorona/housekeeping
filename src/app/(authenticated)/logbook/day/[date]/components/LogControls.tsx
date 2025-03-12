@@ -1,5 +1,5 @@
 "use client";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Checkbox, CheckboxCheckedChangeDetails } from "@chakra-ui/react";
 import { Log } from "@/db/schema/chores";
 import { LuCheck } from "react-icons/lu";
@@ -11,7 +11,10 @@ export type LogControlsProps = {
 };
 
 export const LogControls: FC<LogControlsProps> = ({ log, onChange }) => {
+  const [checked, setChecked] = useState(log?.done);
+  
   const handleChange = async (event: CheckboxCheckedChangeDetails) => {
+    setChecked(!!event.checked);
     try {
       await onChange(!!event.checked);
     } catch {
@@ -23,10 +26,10 @@ export const LogControls: FC<LogControlsProps> = ({ log, onChange }) => {
   };
 
   return (
-    <Checkbox.Root checked={log?.done} onCheckedChange={handleChange} size="lg">
+    <Checkbox.Root checked={checked} onCheckedChange={handleChange} size="lg">
       <Checkbox.HiddenInput />
       <Checkbox.Control>
-        {log?.done && <LuCheck />}
+        {checked && <LuCheck />}
       </Checkbox.Control>
     </Checkbox.Root>
   );

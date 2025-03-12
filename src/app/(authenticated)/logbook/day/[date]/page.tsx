@@ -67,7 +67,7 @@ export default async function DaySchedulePage({
                     .onConflictDoUpdate({
                       target: [logs.date, logs.memberId],
                       set: { done },
-                    });
+                    }).execute();
                   revalidatePath(`/logbook/day/${date}`);
                 }}
               />
