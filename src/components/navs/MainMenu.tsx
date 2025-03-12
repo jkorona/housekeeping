@@ -20,18 +20,25 @@ import {
   Flex,
   Image,
   Stack,
+  Separator,
 } from "@chakra-ui/react";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { AiOutlineSchedule } from "react-icons/ai";
-import { CgProfile } from "react-icons/cg";
-import { LuHammer, LuLogOut } from "react-icons/lu";
-import { LiaBroomSolid } from "react-icons/lia";
+import {
+  LuCalendarCheck,
+  LuHammer,
+  LuLogOut,
+  LuPiggyBank,
+  LuSwords,
+  LuUsers,
+} from "react-icons/lu";
 import NextLink from "next/link";
 
 const links = [
-  { label: "Logbook", href: "/logbook/", icon: <AiOutlineSchedule /> },
-  { label: "Members", href: "/admin/members", icon: <CgProfile /> },
-  { label: "Chores", href: "/admin/chores", icon: <LiaBroomSolid /> },
+  { label: "Logbook", href: "/logbook/", icon: <LuCalendarCheck /> },
+  { label: "Bank", href: "/bank/", icon: <LuPiggyBank /> },
+  { separator: true },
+  { label: "Members", href: "/admin/members", icon: <LuUsers /> },
+  { label: "Chores", href: "/admin/chores", icon: <LuSwords /> },
   { label: "Schedule", href: "/admin/schedule", icon: <LuHammer /> },
 ];
 
@@ -61,22 +68,27 @@ export const MainMenu: FC = async () => {
         </DrawerHeader>
         <DrawerBody>
           <Flex direction="column">
-            {links.map(({ label, icon, href }) => (
-              <DrawerActionTrigger key={href} asChild>
-                <Button
-                  asChild
-                  fontSize="lg"
-                  variant="ghost"
-                  width="full"
-                  justifyContent="flex-start"
-                >
-                  <NextLink href={href}>
-                    {icon}
-                    {label}
-                  </NextLink>
-                </Button>
-              </DrawerActionTrigger>
-            ))}
+            {links.map(({ label, icon, href, separator }) => {
+              if (separator) {
+                return <Separator key="separator" variant="solid" size="sm" />;
+              }
+              return (
+                <DrawerActionTrigger key={href} asChild>
+                  <Button
+                    asChild
+                    fontSize="lg"
+                    variant="ghost"
+                    width="full"
+                    justifyContent="flex-start"
+                  >
+                    <NextLink href={href!}>
+                      {icon}
+                      {label}
+                    </NextLink>
+                  </Button>
+                </DrawerActionTrigger>
+              );
+            })}
           </Flex>
         </DrawerBody>
         {session?.user && (
