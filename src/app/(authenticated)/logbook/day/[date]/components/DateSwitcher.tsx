@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, FC, useRef } from "react";
-import { Button, Grid, GridItem, Heading, Icon, Input } from "@chakra-ui/react";
+import { Button, Grid, GridItem, Input } from "@chakra-ui/react";
 import { LuArrowLeft, LuArrowRight, LuCalendarDays } from "react-icons/lu";
 import { addDays, format, isToday, parse, subDays } from "date-fns";
 
@@ -42,15 +42,16 @@ export const DateSwitcher: FC<WeekdaySwitcherProps> = ({ date, onChange }) => {
           <LuArrowLeft />
         </Button>
       </GridItem>
-      <GridItem
-        justifySelf="center"
-        display="flex"
-        alignItems="center"
-        position="relative"
-        gap="1"
-        _hover={{ textDecoration: "underline" }}
-        onClick={() => dateInputRef.current?.showPicker()}
-      >
+      <GridItem justifySelf="center" position="relative">
+        <Button
+          variant="plain"
+          onClick={() => dateInputRef.current?.showPicker()}
+          size={{ base: "lg", mdDown: "md" }}
+          _hover={{ textDecoration: "underline" }}
+        >
+          <LuCalendarDays />
+            {format(date, "cccc dd MMMM yyyy")}
+        </Button>
         <Input
           type="date"
           value={format(date, DATE_FORMAT)}
@@ -58,20 +59,11 @@ export const DateSwitcher: FC<WeekdaySwitcherProps> = ({ date, onChange }) => {
           ref={dateInputRef}
           visibility="hidden"
           position="absolute"
-          top="8"
           h="0"
+          top="8"
+          left="2"
           onChange={handleDateChange}
         />
-        <Icon fontSize="lg">
-          <LuCalendarDays />
-        </Icon>
-        <Heading
-          position="relative"
-          size={{ base: "lg", mdDown: "md" }}
-          textTransform="capitalize"
-        >
-          {format(date, "cccc dd MMMM yyyy")}
-        </Heading>
       </GridItem>
       <GridItem justifySelf="flex-end" asChild>
         <Button
