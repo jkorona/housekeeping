@@ -1,29 +1,22 @@
 "use client";
 
-import { ChangeEvent, FC, useRef } from "react";
-import { Button, Grid, GridItem, Input } from "@chakra-ui/react";
+import { FC } from "react";
+import { Button, Grid, GridItem } from "@chakra-ui/react";
 import { LuArrowLeft, LuArrowRight, LuCalendarDays } from "react-icons/lu";
-import { addDays, format, isToday, parse, subDays } from "date-fns";
+import { addDays, format, isToday, subDays } from "date-fns";
+import { DatePicker } from "@/components/ui/date-picker";
 
 export type WeekdaySwitcherProps = {
   date: Date;
   onChange: (date: Date) => void;
 };
 
-const DATE_FORMAT = "yyyy-MM-dd";
-
 export const DateSwitcher: FC<WeekdaySwitcherProps> = ({ date, onChange }) => {
-  const dateInputRef = useRef<HTMLInputElement>(null);
-
   const handlePrevDay = () => {
     onChange(subDays(date, 1));
   };
   const handleNextDay = () => {
     onChange(addDays(date, 1));
-  };
-  const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const dateString = e.target.value;
-    onChange(parse(dateString, DATE_FORMAT, new Date()));
   };
 
   return (
@@ -43,26 +36,20 @@ export const DateSwitcher: FC<WeekdaySwitcherProps> = ({ date, onChange }) => {
         </Button>
       </GridItem>
       <GridItem justifySelf="center" position="relative">
-        <Button
-          variant="plain"
-          onClick={() => dateInputRef.current?.showPicker()}
-          size={{ base: "lg", mdDown: "md" }}
-          _hover={{ textDecoration: "underline" }}
-        >
-          <LuCalendarDays />
-            {format(date, "cccc dd MMMM yyyy")}
-        </Button>
-        <Input
-          type="date"
-          value={format(date, DATE_FORMAT)}
-          max={format(new Date(), DATE_FORMAT)}
-          ref={dateInputRef}
-          visibility="hidden"
-          position="absolute"
-          h="0"
-          top="8"
-          left="2"
-          onChange={handleDateChange}
+        <DatePicker
+          selected={date}
+          maxDate={new Date()}
+          onChange={(date) => onChange(date!)}
+          customInput={
+            <Button
+              variant="plain"
+              size={{ base: "lg", mdDown: "md" }}
+              _hover={{ textDecoration: "underline" }}
+            >
+              <LuCalendarDays />
+              {format(date, "cccc dd MMMM yyyy")}
+            </Button>
+          }
         />
       </GridItem>
       <GridItem justifySelf="flex-end" asChild>
