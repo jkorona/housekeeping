@@ -39,6 +39,7 @@ export const DateSwitcher: FC<WeekdaySwitcherProps> = ({ date, onChange }) => {
         <DatePicker
           selected={date}
           maxDate={new Date()}
+          showMonthDropdown
           onChange={(date) => onChange(date!)}
           customInput={
             <Button
