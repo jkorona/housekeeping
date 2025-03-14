@@ -1,32 +1,36 @@
-import { db } from "@/db";
-import { transactions } from "@/db/schema/bank";
-import { members } from "@/db/schema/chores";
-import { Heading } from "@chakra-ui/react";
-import { desc, eq, sql } from "drizzle-orm";
+import { fetchMembersBalances } from "@/db/actions/fetchMembersBalances";
+import { Grid, GridItem, Heading, HStack, Tag, Text } from "@chakra-ui/react";
+import { Fragment } from "react";
 
 export default async function BankPage() {
-  const latestTransactionsByAccount = await db
-    .selectDistinct({
-      id: members.id,
-      name: members.name,
-      total: sql`COALESCE(last_transaction.total, 0)`.as("total"),
-    })
-    .from(members)
-    .leftJoin(
-      db
-        .selectDistinctOn([transactions.accountId])
-        .from(transactions)
-        .orderBy(transactions.accountId, desc(transactions.createdAt))
-        .as("last_transaction"),
-      eq(members.id, sql.raw("last_transaction.account_id"))
-    );
+  const membersWithBalances = await fetchMembersBalances();
 
   return (
     <>
       <Heading as="h1" size="3xl">
         Bank
       </Heading>
-      {JSON.stringify(latestTransactionsByAccount, null, 3)}
+      <Grid gridTemplateColumns="min-content 1fr">
+        {membersWithBalances.map(({ id, name, color, total }) => (
+          <Fragment key={`${id}`}>
+            <GridItem padding="3">
+              <Tag.Root
+                size="xl"
+                w="full"
+                colorPalette={color}
+                justifyContent="center"
+              >
+                <Tag.Label>{name}</Tag.Label>
+              </Tag.Root>
+            </GridItem>
+            <GridItem padding="3" alignSelf="center" justifySelf="flex-end">
+              <HStack justifyContent="space-between">
+                <Text textStyle="xl">{`${total} PLN`}</Text>
+              </HStack>
+            </GridItem>
+          </Fragment>
+        ))}
+      </Grid>
     </>
   );
 }
