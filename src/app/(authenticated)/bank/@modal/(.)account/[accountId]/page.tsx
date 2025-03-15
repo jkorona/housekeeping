@@ -1,28 +1,41 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Dialog } from "@chakra-ui/react";
+import {
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
-export default function AccountModal({ params }: { params: { id: string } }) {
+export default function AccountModal({
+  params,
+}: {
+  params: { accountId: string };
+}) {
   const router = useRouter();
 
   return (
-    <Dialog.Root open>
-      <Dialog.Backdrop />
-      <Dialog.Positioner>
-        <Dialog.Content>
-          <Dialog.CloseTrigger />
-          <Dialog.Header>
-            <Dialog.Title>Hello</Dialog.Title>
-          </Dialog.Header>
-          <Dialog.Body >
-            <h1>Account</h1>
-          </Dialog.Body>
-          <Dialog.Footer >
-            <button>ok</button>
-          </Dialog.Footer>
-        </Dialog.Content>
-      </Dialog.Positioner>
-    </Dialog.Root>
+    <DialogRoot
+      open
+      size={["full", "xl"]}
+      onOpenChange={() => router.back()}
+    >
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Hello {params.accountId}</DialogTitle>
+        </DialogHeader>
+        <DialogBody>
+          <h1>Account</h1>
+        </DialogBody>
+        <DialogFooter>
+          Footer
+        </DialogFooter>
+        <DialogCloseTrigger />
+      </DialogContent>
+    </DialogRoot>
   );
 }
