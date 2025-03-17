@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { use } from "react";
 import { useRouter } from "next/navigation";
 import {
   DialogBody,
@@ -14,26 +14,21 @@ import {
 export default function AccountModal({
   params,
 }: {
-  params: { accountId: string };
+  params: Promise<{ accountId: string }>;
 }) {
   const router = useRouter();
+  const { accountId } = use(params);
 
   return (
-    <DialogRoot
-      open
-      size={["full", "xl"]}
-      onOpenChange={() => router.back()}
-    >
+    <DialogRoot open size={["full", "xl"]} onOpenChange={() => router.back()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Hello {params.accountId}</DialogTitle>
+          <DialogTitle>Hello {accountId}</DialogTitle>
         </DialogHeader>
         <DialogBody>
           <h1>Account</h1>
         </DialogBody>
-        <DialogFooter>
-          Footer
-        </DialogFooter>
+        <DialogFooter>Footer</DialogFooter>
         <DialogCloseTrigger />
       </DialogContent>
     </DialogRoot>
