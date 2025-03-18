@@ -1,6 +1,7 @@
 import React from "react";
 import { db } from "@/db";
 import { AccountModal } from "./components/AccountModal";
+import { TransactionsList } from "./components/TransactionsList";
 
 export default async function AccountModalPage({
   params,
@@ -13,6 +14,10 @@ export default async function AccountModalPage({
       where: (members, { eq }) => eq(members.id, +accountId),
     })
     .execute();
-  
-  return <AccountModal userName={member?.name ?? ""}></AccountModal>;
+
+  return (
+    <AccountModal userName={member?.name ?? ""}>
+      <TransactionsList accountId={+accountId} page={0} />
+    </AccountModal>
+  );
 }
