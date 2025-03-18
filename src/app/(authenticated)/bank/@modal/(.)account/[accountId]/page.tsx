@@ -1,36 +1,18 @@
-"use client";
-import React, { use } from "react";
-import { useRouter } from "next/navigation";
-import {
-  DialogBody,
-  DialogCloseTrigger,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogRoot,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import React from "react";
+import { db } from "@/db";
+import { AccountModal } from "./components/AccountModal";
 
-export default function AccountModal({
+export default async function AccountModalPage({
   params,
 }: {
   params: Promise<{ accountId: string }>;
 }) {
-  const router = useRouter();
-  const { accountId } = use(params);
-
-  return (
-    <DialogRoot open size={["full", "xl"]} onOpenChange={() => router.back()}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Hello {accountId}</DialogTitle>
-        </DialogHeader>
-        <DialogBody>
-          <h1>Account</h1>
-        </DialogBody>
-        <DialogFooter>Footer</DialogFooter>
-        <DialogCloseTrigger />
-      </DialogContent>
-    </DialogRoot>
-  );
+  const { accountId } = await params;
+  const member = await db.query.members
+    .findFirst({
+      where: (members, { eq }) => eq(members.id, +accountId),
+    })
+    .execute();
+  
+  return <AccountModal userName={member?.name ?? ""}></AccountModal>;
 }
