@@ -16,7 +16,6 @@ import {
   HiMiniEllipsisHorizontal,
 } from "react-icons/hi2";
 import { LinkButton } from "./link-button";
-import Link from "next/link";
 
 interface ButtonVariantMap {
   current: ButtonProps["variant"];
@@ -93,8 +92,8 @@ export const PaginationItem = React.forwardRef<
 
   if (getHref) {
     return (
-      <LinkButton variant={variant} size={size}>
-        <Link href={getHref(props.value)}>{props.value}</Link>
+      <LinkButton variant={variant} size={size} href={getHref(props.value)}>
+        {props.value}
       </LinkButton>
     );
   }
@@ -117,10 +116,12 @@ export const PaginationPrevTrigger = React.forwardRef<
 
   if (getHref) {
     return (
-      <LinkButton variant={variantMap.default} size={size}>
-        <Link href={previousPage != null ? getHref(previousPage) : ""}>
-          <HiChevronLeft />
-        </Link>
+      <LinkButton
+        variant={variantMap.default}
+        size={size}
+        href={previousPage != null ? getHref(previousPage) : ""}
+      >
+        <HiChevronLeft />
       </LinkButton>
     );
   }
@@ -143,10 +144,12 @@ export const PaginationNextTrigger = React.forwardRef<
 
   if (getHref) {
     return (
-      <LinkButton variant={variantMap.default} size={size}>
-        <Link href={nextPage != null ? getHref(nextPage) : ''}>
-          <HiChevronRight />
-        </Link>
+      <LinkButton
+        variant={variantMap.default}
+        size={size}
+        href={nextPage != null ? getHref(nextPage) : ""}
+      >
+        <HiChevronRight />
       </LinkButton>
     );
   }

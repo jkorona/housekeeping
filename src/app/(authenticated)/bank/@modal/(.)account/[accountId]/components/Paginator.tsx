@@ -13,7 +13,7 @@ export type PaginatorProps = {
   size: number;
 };
 
-const getHref = (page: number): string => `?page=${page}`;
+const getHref = (page: number): string => `?page=${page < 1 ? 1 : page}`;
 
 export const Paginator: FC<PaginatorProps> = ({ page, count, size }) => (
   <PaginationRoot
