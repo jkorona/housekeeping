@@ -3,7 +3,7 @@ import { db } from "@/db";
 import { transactions } from "@/db/schema/bank";
 import { count } from "drizzle-orm";
 import { Paginator } from "./Paginator";
-import { Table } from "@chakra-ui/react";
+import { Table, Text } from "@chakra-ui/react";
 import { format } from "date-fns";
 
 export type TransactionsListProps = {
@@ -48,7 +48,11 @@ export const TransactionsList: FC<TransactionsListProps> = async ({
                 {format(row.createdAt, "cccc dd MMMM yyyy hh:mm")}
               </Table.Cell>
               <Table.Cell>{row.description}</Table.Cell>
-              <Table.Cell>{row.amount}</Table.Cell>
+              <Table.Cell>
+                <Text color={row.amount > 0 ? "green.600" : "red.600"}>
+                  {row.amount}
+                </Text>
+              </Table.Cell>
               <Table.Cell textAlign="end">{row.amount}</Table.Cell>
             </Table.Row>
           ))}
