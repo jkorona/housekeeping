@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { db } from "@/db";
 import { transactions } from "@/db/schema/bank";
-import { count } from "drizzle-orm";
+import { count, desc } from "drizzle-orm";
 import { Paginator } from "./Paginator";
 import { Table, Text } from "@chakra-ui/react";
 import { format } from "date-fns";
@@ -20,7 +20,7 @@ export const TransactionsList: FC<TransactionsListProps> = async ({
   const [rows, [{ total }]] = await Promise.all([
     db.query.transactions.findMany({
       where: (transactions, { eq }) => eq(transactions.accountId, accountId),
-      orderBy: (transactions) => transactions.createdAt,
+      orderBy: (transactions) => desc(transactions.createdAt),
       offset: (page - 1) * LIMIT,
       limit: LIMIT,
     }),
@@ -29,7 +29,7 @@ export const TransactionsList: FC<TransactionsListProps> = async ({
 
   return (
     <>
-      <Paginator count={total} page={page} size={LIMIT} />
+      {total > LIMIT && <Paginator count={total} page={page} size={LIMIT} />}
       <Table.Root>
         <Table.Header>
           <Table.Row>
@@ -53,7 +53,7 @@ export const TransactionsList: FC<TransactionsListProps> = async ({
                   {row.amount}
                 </Text>
               </Table.Cell>
-              <Table.Cell textAlign="end">{row.amount}</Table.Cell>
+              <Table.Cell textAlign="end">{row.total}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>

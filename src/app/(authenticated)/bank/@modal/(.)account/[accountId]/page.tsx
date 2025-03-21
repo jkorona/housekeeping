@@ -2,6 +2,7 @@ import React from "react";
 import { db } from "@/db";
 import { AccountModal } from "./components/AccountModal";
 import { TransactionsList } from "./components/TransactionsList";
+import { MemberBalance } from "./components/MemberBalance";
 
 export default async function AccountModalPage({
   params,
@@ -21,6 +22,7 @@ export default async function AccountModalPage({
 
   return (
     <AccountModal userName={member?.name ?? ""}>
+      {member && <MemberBalance member={member} />}      
       <TransactionsList accountId={+accountId} page={page ? +page : 1} />
     </AccountModal>
   );
