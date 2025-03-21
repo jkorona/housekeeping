@@ -16,6 +16,7 @@ import {
   HiMiniEllipsisHorizontal,
 } from "react-icons/hi2";
 import { LinkButton } from "./link-button";
+import { LinkProps } from "next/link";
 
 interface ButtonVariantMap {
   current: ButtonProps["variant"];
@@ -82,7 +83,7 @@ export const PaginationEllipsis = React.forwardRef<
 
 export const PaginationItem = React.forwardRef<
   HTMLButtonElement,
-  ChakraPagination.ItemProps
+  ChakraPagination.ItemProps & Pick<LinkProps, "replace">
 >(function PaginationItem(props, ref) {
   const { page } = usePaginationContext();
   const { size, variantMap, getHref } = useRootProps();
@@ -92,7 +93,7 @@ export const PaginationItem = React.forwardRef<
 
   if (getHref) {
     return (
-      <LinkButton variant={variant} size={size} href={getHref(props.value)}>
+      <LinkButton variant={variant} size={size} href={getHref(props.value)} replace={props.replace}>
         {props.value}
       </LinkButton>
     );
@@ -109,7 +110,7 @@ export const PaginationItem = React.forwardRef<
 
 export const PaginationPrevTrigger = React.forwardRef<
   HTMLButtonElement,
-  ChakraPagination.PrevTriggerProps
+  ChakraPagination.PrevTriggerProps & Pick<LinkProps, "replace">
 >(function PaginationPrevTrigger(props, ref) {
   const { size, variantMap, getHref } = useRootProps();
   const { previousPage } = usePaginationContext();
@@ -120,6 +121,7 @@ export const PaginationPrevTrigger = React.forwardRef<
         variant={variantMap.default}
         size={size}
         href={previousPage != null ? getHref(previousPage) : ""}
+        replace={props.replace}
       >
         <HiChevronLeft />
       </LinkButton>
@@ -137,7 +139,7 @@ export const PaginationPrevTrigger = React.forwardRef<
 
 export const PaginationNextTrigger = React.forwardRef<
   HTMLButtonElement,
-  ChakraPagination.NextTriggerProps
+  ChakraPagination.NextTriggerProps & Pick<LinkProps, "replace">
 >(function PaginationNextTrigger(props, ref) {
   const { size, variantMap, getHref } = useRootProps();
   const { nextPage } = usePaginationContext();
@@ -148,6 +150,7 @@ export const PaginationNextTrigger = React.forwardRef<
         variant={variantMap.default}
         size={size}
         href={nextPage != null ? getHref(nextPage) : ""}
+        replace={props.replace}
       >
         <HiChevronRight />
       </LinkButton>
@@ -163,7 +166,9 @@ export const PaginationNextTrigger = React.forwardRef<
   );
 });
 
-export const PaginationItems = (props: React.HTMLAttributes<HTMLElement>) => {
+export const PaginationItems = (
+  props: React.HTMLAttributes<HTMLElement> & Pick<LinkProps, "replace">
+) => {
   return (
     <ChakraPagination.Context>
       {({ pages }) =>

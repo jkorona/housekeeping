@@ -23,8 +23,8 @@ export const Paginator: FC<PaginatorProps> = ({ page, count, size }) => (
     getHref={getHref}
     variant="subtle"
   >
-    <PaginationPrevTrigger />
-    <PaginationItems />
-    <PaginationNextTrigger />
+    <PaginationPrevTrigger replace />
+    <PaginationItems replace />
+    <PaginationNextTrigger replace />
   </PaginationRoot>
 );
