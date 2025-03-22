@@ -10,11 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-export type AccountModalProps = PropsWithChildren<{
-  userName: string;
-}>;
-
-export const AccountModal: FC<AccountModalProps> = ({ children }) => {
+export const AccountModal: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
 
   return (
