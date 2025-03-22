@@ -9,10 +9,10 @@ export const fetchMembersBalances = async () =>
       id: members.id,
       name: members.name,
       color: members.color,
+      dateOfBirth: members.dateOfBirth,
       total: sql<number>`COALESCE(last_transaction.total, 0)`.as("total"),
     })
     .from(members)
-    .orderBy(members.dateOfBirth)
     .leftJoin(
       db
         .selectDistinctOn([transactions.accountId])
@@ -20,4 +20,5 @@ export const fetchMembersBalances = async () =>
         .orderBy(transactions.accountId, desc(transactions.createdAt))
         .as("last_transaction"),
       eq(members.id, sql.raw("last_transaction.account_id"))
-    );
+    )
+    .orderBy(members.dateOfBirth);

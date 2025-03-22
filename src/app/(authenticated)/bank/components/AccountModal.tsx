@@ -7,7 +7,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogRoot,
-  DialogTitle,
 } from "@/components/ui/dialog";
 
 export const AccountModal: FC<PropsWithChildren> = ({ children }) => {
@@ -16,9 +15,7 @@ export const AccountModal: FC<PropsWithChildren> = ({ children }) => {
   return (
     <DialogRoot open size={["full", "xl"]} onOpenChange={() => router.back()}>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Account details</DialogTitle>
-        </DialogHeader>
+        <DialogHeader/>
         <DialogBody>{children}</DialogBody>
         <DialogCloseTrigger />
       </DialogContent>

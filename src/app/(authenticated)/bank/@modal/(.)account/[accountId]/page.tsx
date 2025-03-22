@@ -1,6 +1,6 @@
 import React from "react";
-import { AccountModal } from "./components/AccountModal";
-import { AccountPage } from "./components/AccountPage";
+import { AccountModal } from "../../../components/AccountModal";
+import { AccountPage } from "../../../components/AccountPage";
 
 export default async function AccountModalPage({
   params,
