@@ -75,6 +75,13 @@ export const logs = pgTable(
   (table) => [primaryKey({ columns: [table.memberId, table.date] })]
 );
 
+export const weeklyReports = pgTable(
+  "weekly_reports",
+  {
+    
+  }
+)
+
 export type Member = InferInsertModel<typeof members>;
 export type Chore = InferInsertModel<typeof chores>;
 export type Assignment = InferInsertModel<typeof assignments>;
