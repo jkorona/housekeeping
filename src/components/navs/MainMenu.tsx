@@ -22,7 +22,7 @@ import {
   Stack,
   Separator,
 } from "@chakra-ui/react";
-import { GiHamburgerMenu } from "react-icons/gi";
+import { GiHamburgerMenu, GiProgression } from "react-icons/gi";
 import {
   LuCalendarCheck,
   LuHammer,
@@ -36,6 +36,7 @@ import NextLink from "next/link";
 const links = [
   { label: "Logbook", href: "/logbook/", icon: <LuCalendarCheck /> },
   { label: "Bank", href: "/bank/", icon: <LuPiggyBank /> },
+  { label: "Weekly progress", href: "/week", icon: <GiProgression /> },
   { separator: true },
   { label: "Members", href: "/admin/members", icon: <LuUsers /> },
   { label: "Chores", href: "/admin/chores", icon: <LuSwords /> },
