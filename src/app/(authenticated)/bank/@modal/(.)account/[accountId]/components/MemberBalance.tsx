@@ -1,7 +1,4 @@
 import { FC } from "react";
-import { desc, eq } from "drizzle-orm";
-import { db } from "@/db";
-import { transactions } from "@/db/schema/bank";
 import { Member } from "@/db/schema/chores";
 import {
   Avatar,
@@ -13,17 +10,14 @@ import {
   Stat,
   Text,
 } from "@chakra-ui/react";
+import { fetchMemberBalance } from "@/db/actions/fetchMemberBalance";
 
 export type MemberBalanceProps = {
   member: Member;
 };
 
 export const MemberBalance: FC<MemberBalanceProps> = async ({ member }) => {
-  const balance = await db
-    .selectDistinct()
-    .from(transactions)
-    .where(eq(transactions.accountId, member.id!))
-    .orderBy(transactions.accountId, desc(transactions.createdAt));
+  const balance = await fetchMemberBalance(member.id!);
 
   return (
     <Stack marginBottom="4">

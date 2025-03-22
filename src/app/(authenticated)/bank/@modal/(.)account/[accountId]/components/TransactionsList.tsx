@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { db } from "@/db";
 import { transactions } from "@/db/schema/bank";
-import { count, desc } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
 import { Paginator } from "./Paginator";
 import { Table, Text } from "@chakra-ui/react";
 import { format } from "date-fns";
@@ -24,7 +24,10 @@ export const TransactionsList: FC<TransactionsListProps> = async ({
       offset: (page - 1) * LIMIT,
       limit: LIMIT,
     }),
-    db.select({ total: count() }).from(transactions),
+    db
+      .select({ total: count() })
+      .from(transactions)
+      .where(eq(transactions.accountId, accountId)),
   ]);
 
   return (
@@ -35,7 +38,9 @@ export const TransactionsList: FC<TransactionsListProps> = async ({
           <Table.Row>
             <Table.ColumnHeader width="30%">Date</Table.ColumnHeader>
             <Table.ColumnHeader width="50%">Description</Table.ColumnHeader>
-            <Table.ColumnHeader width="10%">Amount</Table.ColumnHeader>
+            <Table.ColumnHeader width="10%" textAlign="end">
+              Amount
+            </Table.ColumnHeader>
             <Table.ColumnHeader width="10%" textAlign="end">
               Total
             </Table.ColumnHeader>
@@ -48,7 +53,7 @@ export const TransactionsList: FC<TransactionsListProps> = async ({
                 {format(row.createdAt, "cccc dd MMMM yyyy hh:mm")}
               </Table.Cell>
               <Table.Cell>{row.description}</Table.Cell>
-              <Table.Cell>
+              <Table.Cell textAlign="end">
                 <Text color={row.amount > 0 ? "green.600" : "red.600"}>
                   {row.amount}
                 </Text>

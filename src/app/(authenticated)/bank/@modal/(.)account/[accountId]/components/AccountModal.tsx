@@ -14,14 +14,14 @@ export type AccountModalProps = PropsWithChildren<{
   userName: string;
 }>;
 
-export const AccountModal: FC<AccountModalProps> = ({ userName, children }) => {
+export const AccountModal: FC<AccountModalProps> = ({ children }) => {
   const router = useRouter();
 
   return (
     <DialogRoot open size={["full", "xl"]} onOpenChange={() => router.back()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Account details: {userName}</DialogTitle>
+          <DialogTitle>Account details</DialogTitle>
         </DialogHeader>
         <DialogBody>{children}</DialogBody>
         <DialogCloseTrigger />
