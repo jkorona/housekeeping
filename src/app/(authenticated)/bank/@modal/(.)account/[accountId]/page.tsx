@@ -3,6 +3,7 @@ import { db } from "@/db";
 import { AccountModal } from "./components/AccountModal";
 import { TransactionsList } from "./components/TransactionsList";
 import { MemberBalance } from "./components/MemberBalance";
+import { TransactionForm } from "./components/TransactionForm";
 
 export default async function AccountModalPage({
   params,
@@ -22,7 +23,8 @@ export default async function AccountModalPage({
 
   return (
     <AccountModal userName={member?.name ?? ""}>
-      {member && <MemberBalance member={member} />}      
+      {member && <MemberBalance member={member} />}
+      <TransactionForm />
       <TransactionsList accountId={+accountId} page={page ? +page : 1} />
     </AccountModal>
   );
