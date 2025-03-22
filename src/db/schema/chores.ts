@@ -68,19 +68,26 @@ export const logs = pgTable(
     memberId: integer("member_id")
       .notNull()
       .references(() => members.id),
-    date: date({ mode: "string" }).notNull(),
+    date: date({ mode: "date" }).notNull(),
     done: boolean().notNull(),
     skip: boolean().notNull(),
   },
   (table) => [primaryKey({ columns: [table.memberId, table.date] })]
 );
 
-export const weeklyReports = pgTable(
-  "weekly_reports",
-  {
-    
-  }
-)
+export const logsRelations = relations(logs, ({ one }) => ({
+  member: one(members, {
+    fields: [logs.memberId],
+    references: [members.id],
+  }),
+}));
+
+export const weeklyReports = pgTable("weekly_reports", {
+  id: serial().primaryKey(),
+  year: integer().notNull(),
+  week: integer().notNull(),
+  closed: boolean().notNull().default(true),
+});
 
 export type Member = InferInsertModel<typeof members>;
 export type Chore = InferInsertModel<typeof chores>;

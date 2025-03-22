@@ -28,7 +28,7 @@ export default async function DaySchedulePage({
   });
 
   const dayLogs = await db.query.logs.findMany({
-    where: (logs, { eq }) => eq(logs.date, date),
+    where: (logs, { eq }) => eq(logs.date, dateObject),
   });
 
   if (dayAssignments.length === 0) {
@@ -59,8 +59,8 @@ export default async function DaySchedulePage({
                   await db
                     .insert(logs)
                     .values({
-                      date,
                       done,
+                      date: dateObject,
                       memberId: member.id,
                       skip: false,
                     })
