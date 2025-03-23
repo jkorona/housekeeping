@@ -1,5 +1,3 @@
-import { format } from "date-fns";
-import { DATE_FORMAT } from "@/model/Formats";
 import { fetchWeekSummary } from "@/db/actions/fetchWeekSummary";
 
 export type WeekPageProps = {
@@ -8,16 +6,16 @@ export type WeekPageProps = {
 
 export default async function WeekPage({ params }: WeekPageProps) {
   const { week_n_year } = await params;
-  const [week, year] = week_n_year.split('-').map(Number);
+  const [week, year] = week_n_year.split("-").map(Number);
 
-  const logs = await fetchWeekSummary(week, year)
+  const summary = await fetchWeekSummary(week, year);
 
   return (
     <div>
       <ul>
-        {logs.map(({ memberId, date, member }) => (
-          <li key={memberId + "_" + date}>
-            {member.name} {format(date, DATE_FORMAT)}
+        {summary.map(({ id, name, completed, all }) => (
+          <li key={id}>
+            {`${name}\t|\t${Math.floor((100 * completed) / all)}%`}
           </li>
         ))}
       </ul>

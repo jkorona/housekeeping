@@ -27,6 +27,10 @@ export const members = pgTable("members", {
     .default("2020-01-01"),
 });
 
+export const membersRelations = relations(members, ({ many }) => ({
+  logs: many(logs),
+}));
+
 export const weekDays = pgEnum("week_days", [
   "monday",
   "tuesday",
