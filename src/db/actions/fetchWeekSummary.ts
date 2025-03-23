@@ -38,7 +38,7 @@ export const fetchWeekSummary = async (
         where: ({ date }, { between }) => between(date, startDate, endDate),
       },
     },
-    orderBy: ({ dateOfBirth }, { desc }) => desc(dateOfBirth),
+    orderBy: ({ dateOfBirth }, { asc }) => asc(dateOfBirth),
   });
 
   return membersWithLogs.map((item) => ({

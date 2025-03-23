@@ -1,4 +1,13 @@
 import { fetchWeekSummary } from "@/db/actions/fetchWeekSummary";
+import {
+  FormatNumber,
+  Grid,
+  GridItem,
+  Progress,
+  Tag,
+  Text,
+} from "@chakra-ui/react";
+import React from "react";
 
 export type WeekPageProps = {
   params: Promise<{ week_n_year: string }>;
@@ -11,14 +20,50 @@ export default async function WeekPage({ params }: WeekPageProps) {
   const summary = await fetchWeekSummary(week, year);
 
   return (
-    <div>
-      <ul>
-        {summary.map(({ id, name, completed, all }) => (
-          <li key={id}>
-            {`${name}\t|\t${Math.floor((100 * completed) / all)}%`}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Grid
+      gridTemplateColumns="min-content 1fr min-content min-content"
+      gap="2"
+      alignItems="center"
+    >
+      {summary.map(({ id, name, color, rate, completed, all }) => {
+        const progress = Math.floor((100 * completed) / all);
+        const award = Math.floor(progress < 50 ? 0 : rate * (progress / 100));
+        return (
+          <React.Fragment key={id}>
+            <GridItem>
+              <Tag.Root
+                size="xl"
+                w="full"
+                colorPalette={color}
+                justifyContent="center"
+              >
+                <Tag.Label>{name}</Tag.Label>
+              </Tag.Root>
+            </GridItem>
+            <GridItem padding="3">
+              <Progress.Root
+                size="lg"
+                defaultValue={progress}
+                colorPalette={progress < 50 ? "red" : "green"}
+                striped
+                animated
+              >
+                <Progress.Track flex="1" borderRadius="l3">
+                  <Progress.Range />
+                </Progress.Track>
+              </Progress.Root>
+            </GridItem>
+            <GridItem>
+              <Text textStyle="sm">{progress}%</Text>
+            </GridItem>
+            <GridItem>
+              <Text textStyle="sm" fontWeight="semibold">
+                <FormatNumber value={award} style="currency" currency="PLN" />
+              </Text>
+            </GridItem>
+          </React.Fragment>
+        );
+      })}
+    </Grid>
   );
 }

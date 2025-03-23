@@ -35,8 +35,8 @@ import NextLink from "next/link";
 
 const links = [
   { label: "Logbook", href: "/logbook/", icon: <LuCalendarCheck /> },
-  { label: "Bank", href: "/bank/", icon: <LuPiggyBank /> },
   { label: "Weekly progress", href: "/week", icon: <GiProgression /> },
+  { label: "Bank", href: "/bank/", icon: <LuPiggyBank /> },
   { separator: true },
   { label: "Members", href: "/admin/members", icon: <LuUsers /> },
   { label: "Chores", href: "/admin/chores", icon: <LuSwords /> },
