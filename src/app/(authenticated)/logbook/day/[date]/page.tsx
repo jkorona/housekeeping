@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { Fragment } from "react";
-import { format, parse } from "date-fns";
+import { compareAsc, format, parse } from "date-fns";
 import { revalidatePath } from "next/cache";
 import { logs, WeekDay } from "@/db/schema/chores";
 import { Grid, GridItem, HStack, Tag, Text } from "@chakra-ui/react";
@@ -16,7 +16,14 @@ export default async function DaySchedulePage({
 }: DaySchedulePageProps) {
   const { date } = await params;
 
-  const dateObject = parse(date, "yyyy-MM-dd", new Date());
+  const dateWithTz = parse(date, "yyyy-MM-dd", new Date());
+  const dateObject = new Date(
+    Date.UTC(
+      dateWithTz.getFullYear(),
+      dateWithTz.getMonth(),
+      dateWithTz.getDate()
+    )
+  );
   const weekDay = format(dateObject, "EEEE").toLowerCase() as WeekDay;
 
   const dayAssignments = await db.query.assignments.findMany({
@@ -31,50 +38,57 @@ export default async function DaySchedulePage({
     where: (logs, { eq }) => eq(logs.date, dateObject),
   });
 
+  console.log(date, dateObject.toISOString(), dayLogs);
+
   if (dayAssignments.length === 0) {
     return <EmptyState />;
   }
 
   return (
     <Grid gridTemplateColumns="min-content 1fr">
-      {dayAssignments.map(({ member, chore }) => (
-        <Fragment key={`${member.id!}_${weekDay}`}>
-          <GridItem padding="3">
-            <Tag.Root
-              size="xl"
-              w="full"
-              colorPalette={member.color}
-              justifyContent="center"
-            >
-              <Tag.Label>{member.name}</Tag.Label>
-            </Tag.Root>
-          </GridItem>
-          <GridItem padding="3" alignSelf="center">
-            <HStack justifyContent="space-between">
-              <Text textStyle={{ base: "lg", mdDown: "sm" }}>{chore.name}</Text>
-              <LogControls
-                log={dayLogs.find(({ memberId }) => memberId === member.id)}
-                onChange={async (done: boolean) => {
-                  "use server";
-                  await db
-                    .insert(logs)
-                    .values({
-                      done,
-                      date: dateObject,
-                      memberId: member.id,
-                      skip: false,
-                    })
-                    .onConflictDoUpdate({
-                      target: [logs.date, logs.memberId],
-                      set: { done },
-                    }).execute();
-                  revalidatePath(`/logbook/day/${date}`);
-                }}
-              />
-            </HStack>
-          </GridItem>
-        </Fragment>
-      ))}
+      {dayAssignments
+        .sort((a, b) => compareAsc(a.member.dateOfBirth, b.member.dateOfBirth))
+        .map(({ member, chore }) => (
+          <Fragment key={`${member.id!}_${weekDay}`}>
+            <GridItem padding="3">
+              <Tag.Root
+                size="xl"
+                w="full"
+                colorPalette={member.color}
+                justifyContent="center"
+              >
+                <Tag.Label>{member.name}</Tag.Label>
+              </Tag.Root>
+            </GridItem>
+            <GridItem padding="3" alignSelf="center">
+              <HStack justifyContent="space-between">
+                <Text textStyle={{ base: "lg", mdDown: "sm" }}>
+                  {chore.name}
+                </Text>
+                <LogControls
+                  log={dayLogs.find(({ memberId }) => memberId === member.id)}
+                  onChange={async (done: boolean) => {
+                    "use server";
+                    await db
+                      .insert(logs)
+                      .values({
+                        done,
+                        date: dateObject,
+                        memberId: member.id,
+                        skip: false,
+                      })
+                      .onConflictDoUpdate({
+                        target: [logs.date, logs.memberId],
+                        set: { done },
+                      })
+                      .execute();
+                    revalidatePath(`/logbook/day/${date}`);
+                  }}
+                />
+              </HStack>
+            </GridItem>
+          </Fragment>
+        ))}
     </Grid>
   );
 }
