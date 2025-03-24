@@ -1,13 +1,6 @@
-import {
-  Heading,
-  LinkBox,
-  LinkOverlay,
-  Table,
-  Tag,
-  Text,
-} from "@chakra-ui/react";
+import { Heading, Table, Tag, Text } from "@chakra-ui/react";
 import { fetchMembersBalances } from "@/db/actions/fetchMembersBalances";
-import Link from "next/link";
+import LinkTableRow from "./components/LinkTableRow";
 
 export default async function BankPage() {
   const membersWithBalances = await fetchMembersBalances();
@@ -28,27 +21,21 @@ export default async function BankPage() {
         </Table.Header>
         <Table.Body>
           {membersWithBalances.map(({ id, name, color, total }) => (
-            <LinkBox key={id} asChild>
-              <Table.Row _hover={{ cursor: "pointer" }}>
-                <Table.Cell>
-                  <Tag.Root
-                    size="xl"
-                    w="80px"
-                    colorPalette={color}
-                    justifyContent="center"
-                  >
-                    <Tag.Label>{name}</Tag.Label>
-                  </Tag.Root>
-                </Table.Cell>
-                <Table.Cell textAlign="end">
-                  <LinkOverlay asChild>
-                    <Link href={`/bank/account/${id}`}>
-                      <Text textStyle="lg">{`${total} PLN`}</Text>
-                    </Link>
-                  </LinkOverlay>
-                </Table.Cell>
-              </Table.Row>
-            </LinkBox>
+            <LinkTableRow key={id} href={`/bank/account/${id}`}>
+              <Table.Cell>
+                <Tag.Root
+                  size="xl"
+                  w="80px"
+                  colorPalette={color}
+                  justifyContent="center"
+                >
+                  <Tag.Label>{name}</Tag.Label>
+                </Tag.Root>
+              </Table.Cell>
+              <Table.Cell textAlign="end">
+                <Text textStyle="lg">{`${total} PLN`}</Text>
+              </Table.Cell>
+            </LinkTableRow>
           ))}
         </Table.Body>
       </Table.Root>
