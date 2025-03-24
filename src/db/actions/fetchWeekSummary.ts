@@ -2,17 +2,22 @@ import { endOfISOWeek, setISOWeek, startOfISOWeek } from "date-fns";
 import { db } from "..";
 import { Log } from "../schema/chores";
 
-export type WeekSummary = Array<{
+export type MembersWeekSummary = {
   id: number;
   name: string;
-  rate: number;
   color: string;
   completed: number;
   all: number;
-}>;
+  progress: number;
+  award: number;
+};
+export type WeekSummary = MembersWeekSummary[];
 
-const calculateScore = (logs: Log[]): { completed: number; all: number } =>
-  logs.reduce(
+const calculateScore = (
+  logs: Log[],
+  rate: number
+): Pick<MembersWeekSummary, "completed" | "all" | "progress" | "award"> => {
+  const { completed, all } = logs.reduce(
     (result, log) => {
       if (log.skip) {
         result.all -= 1;
@@ -23,6 +28,10 @@ const calculateScore = (logs: Log[]): { completed: number; all: number } =>
     },
     { completed: 0, all: 6 }
   );
+  const progress = Math.floor((100 * completed) / all);
+  const award = Math.floor(progress < 50 ? 0 : rate * (progress / 100));
+  return { completed, all, progress, award };
+};
 
 export const fetchWeekSummary = async (
   week: number,
@@ -45,7 +54,6 @@ export const fetchWeekSummary = async (
     id: item.id,
     name: item.name,
     color: item.color,
-    rate: item.rate,
-    ...calculateScore(item.logs ?? []),
+    ...calculateScore(item.logs ?? [], item.rate),
   }));
 };

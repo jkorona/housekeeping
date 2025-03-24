@@ -25,9 +25,7 @@ export default async function WeekPage({ params }: WeekPageProps) {
       gap="2"
       alignItems="center"
     >
-      {summary.map(({ id, name, color, rate, completed, all }) => {
-        const progress = Math.floor((100 * completed) / all);
-        const award = Math.floor(progress < 50 ? 0 : rate * (progress / 100));
+      {summary.map(({ id, name, color, progress, award }) => {
         return (
           <React.Fragment key={id}>
             <GridItem>
