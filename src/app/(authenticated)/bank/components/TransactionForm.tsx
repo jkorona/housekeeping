@@ -73,7 +73,7 @@ export const TransactionForm: FC<TransactionFormProps> = ({ action }) => {
                 <Fieldset.Content>
                   <Field label="Amount" required>
                     <NumberInputRoot name="amount" defaultValue="0" w="full">
-                      <NumberInputField />
+                      <NumberInputField inputMode="numeric" />
                     </NumberInputRoot>
                   </Field>
                   <Field label="Description">
