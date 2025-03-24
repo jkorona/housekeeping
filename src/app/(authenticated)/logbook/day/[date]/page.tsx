@@ -44,49 +44,65 @@ export default async function DaySchedulePage({
 
   return (
     <Grid gridTemplateColumns="min-content 1fr">
+      <HStack
+        justifyContent="flex-end"
+        gridColumn="span 2"
+        gap="2"
+        paddingTop="3"
+        paddingRight="8"
+      >
+        <Text textStyle="xs" fontWeight="semibold">Done</Text>
+        <Text textStyle="xs" fontWeight="semibold">Skip</Text>
+      </HStack>
       {dayAssignments
         .sort((a, b) => compareAsc(a.member.dateOfBirth, b.member.dateOfBirth))
-        .map(({ member, chore }) => (
-          <Fragment key={`${member.id!}_${weekDay}`}>
-            <GridItem padding="3">
-              <Tag.Root
-                size="xl"
-                w="full"
-                colorPalette={member.color}
-                justifyContent="center"
-              >
-                <Tag.Label>{member.name}</Tag.Label>
-              </Tag.Root>
-            </GridItem>
-            <GridItem padding="3" alignSelf="center">
-              <HStack justifyContent="space-between">
-                <Text textStyle={{ base: "lg", mdDown: "sm" }}>
-                  {chore.name}
-                </Text>
-                <LogControls
-                  log={dayLogs.find(({ memberId }) => memberId === member.id)}
-                  onChange={async (done: boolean) => {
-                    "use server";
-                    await db
-                      .insert(logs)
-                      .values({
-                        done,
-                        date: dateObject,
-                        memberId: member.id,
-                        skip: false,
-                      })
-                      .onConflictDoUpdate({
-                        target: [logs.date, logs.memberId],
-                        set: { done },
-                      })
-                      .execute();
-                    revalidatePath(`/logbook/day/${date}`);
-                  }}
-                />
-              </HStack>
-            </GridItem>
-          </Fragment>
-        ))}
+        .map(({ member, chore }) => {
+          const log = dayLogs.find(({ memberId }) => memberId === member.id);
+          return (
+            <Fragment key={`${member.id!}_${weekDay}`}>
+              <GridItem padding="3">
+                <Tag.Root
+                  size="xl"
+                  w="full"
+                  colorPalette={member.color}
+                  justifyContent="center"
+                >
+                  <Tag.Label>{member.name}</Tag.Label>
+                </Tag.Root>
+              </GridItem>
+              <GridItem padding="3" alignSelf="center">
+                <HStack justifyContent="space-between">
+                  <Text
+                    textStyle={{ base: "lg", mdDown: "sm" }}
+                    {...(log?.skip ? { textDecoration: "line-through" } : {})}
+                  >
+                    {chore.name}
+                  </Text>
+                  <LogControls
+                    log={log}
+                    onChange={async (done: boolean, skip: boolean) => {
+                      "use server";
+                      await db
+                        .insert(logs)
+                        .values({
+                          done,
+                          date: dateObject,
+                          memberId: member.id,
+                          skip,
+                        })
+                        .onConflictDoUpdate({
+                          target: [logs.date, logs.memberId],
+                          set: { done, skip },
+                        })
+                        .execute();
+                      revalidatePath(`/logbook/day/${date}`);
+                    }}
+                  />
+                </HStack>
+              </GridItem>
+            </Fragment>
+          );
+        })}
     </Grid>
   );
 }

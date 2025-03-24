@@ -1,22 +1,27 @@
 "use client";
 import { FC, useState } from "react";
-import { Checkbox, CheckboxCheckedChangeDetails } from "@chakra-ui/react";
+import {
+  Checkbox,
+  CheckboxCheckedChangeDetails,
+  HStack,
+  Switch,
+} from "@chakra-ui/react";
 import { Log } from "@/db/schema/chores";
 import { LuCheck } from "react-icons/lu";
 import { toaster } from "@/components/ui/toaster";
 
 export type LogControlsProps = {
   log?: Log;
-  onChange: (done: boolean) => Promise<void>;
+  onChange: (done: boolean, skip: boolean) => Promise<void>;
 };
 
 export const LogControls: FC<LogControlsProps> = ({ log, onChange }) => {
   const [checked, setChecked] = useState(log?.done);
-  
-  const handleChange = async (event: CheckboxCheckedChangeDetails) => {
-    setChecked(!!event.checked);
+  const [skipped, setSkipped] = useState(log?.skip);
+
+  const save = async (done: boolean, skip: boolean) => {
     try {
-      await onChange(!!event.checked);
+      await onChange(done, skip);
     } catch {
       toaster.error({
         title: "Connection error",
@@ -25,12 +30,36 @@ export const LogControls: FC<LogControlsProps> = ({ log, onChange }) => {
     }
   };
 
+  const handleDoneChange = async (event: CheckboxCheckedChangeDetails) => {
+    setChecked(!!event.checked);
+    save(!!event.checked, log?.skip ?? false);
+  };
+
+  const handleSkipChange = async (event: CheckboxCheckedChangeDetails) => {
+    setSkipped(!!event.checked);
+    save(log?.done ?? false, !!event.checked);
+  };
+
   return (
-    <Checkbox.Root checked={checked} onCheckedChange={handleChange} size="lg">
-      <Checkbox.HiddenInput />
-      <Checkbox.Control>
-        {checked && <LuCheck />}
-      </Checkbox.Control>
-    </Checkbox.Root>
+    <HStack gap="2">
+      <Checkbox.Root
+        checked={checked}
+        disabled={skipped}
+        onCheckedChange={handleDoneChange}
+        size="lg"
+      >
+        <Checkbox.HiddenInput name="done" />
+        <Checkbox.Control>{checked && <LuCheck />}</Checkbox.Control>
+      </Checkbox.Root>
+      <Switch.Root
+        size="lg"
+        checked={skipped}
+        disabled={checked}
+        onCheckedChange={handleSkipChange}
+      >
+        <Switch.HiddenInput name="skip" />
+        <Switch.Control />
+      </Switch.Root>
+    </HStack>
   );
 };
