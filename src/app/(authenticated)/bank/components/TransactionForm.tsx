@@ -5,13 +5,17 @@ import {
   Button,
   Card,
   Fieldset,
-  Input,
   Presence,
+  SegmentGroup,
   Stack,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
+import {
+  NumberInputField,
+  NumberInputRoot,
+} from "@/components/ui/number-input";
 import { useFormStatus } from "react-dom";
 
 const animation = {
@@ -49,11 +53,15 @@ export const TransactionForm: FC<TransactionFormProps> = ({ action }) => {
     setSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
+    const type = formData.get("type") as string;
     const amount = parseFloat(formData.get("amount") as string);
     const description = formData.get("description") as string;
 
     try {
-      await action(amount, description);
+      await action(
+        type === "Withdrawal" && amount > 0 ? -amount : amount,
+        description
+      );
     } finally {
       onToggle();
       setSubmitting(false);
@@ -68,14 +76,20 @@ export const TransactionForm: FC<TransactionFormProps> = ({ action }) => {
               <Card.Body gap="2">
                 <Card.Title mt="2">Add new transaction</Card.Title>
                 <Fieldset.Content>
+                  <Field label="Type" required>
+                    <SegmentGroup.Root
+                      name="type"
+                      size="md"
+                      defaultValue="Deposit"
+                    >
+                      <SegmentGroup.Indicator />
+                      <SegmentGroup.Items items={["Deposit", "Withdrawal"]} />
+                    </SegmentGroup.Root>
+                  </Field>
                   <Field label="Amount" required>
-                    <Input
-                      type="number"
-                      inputMode="decimal"
-                      name="amount"
-                      defaultValue="0"
-                      w="full"
-                    />
+                    <NumberInputRoot name="amount" defaultValue="0" w="full">
+                      <NumberInputField inputMode="decimal" />
+                    </NumberInputRoot>
                   </Field>
                   <Field label="Description">
                     <Textarea name="description" rows={5} />

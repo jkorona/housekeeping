@@ -38,8 +38,6 @@ export default async function DaySchedulePage({
     where: (logs, { eq }) => eq(logs.date, dateObject),
   });
 
-  console.log(date, dateObject.toISOString(), dayLogs);
-
   if (dayAssignments.length === 0) {
     return <EmptyState />;
   }
