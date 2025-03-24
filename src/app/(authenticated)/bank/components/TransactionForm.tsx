@@ -5,16 +5,13 @@ import {
   Button,
   Card,
   Fieldset,
+  Input,
   Presence,
   Stack,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
-import {
-  NumberInputField,
-  NumberInputRoot,
-} from "@/components/ui/number-input";
 import { useFormStatus } from "react-dom";
 
 const animation = {
@@ -72,9 +69,13 @@ export const TransactionForm: FC<TransactionFormProps> = ({ action }) => {
                 <Card.Title mt="2">Add new transaction</Card.Title>
                 <Fieldset.Content>
                   <Field label="Amount" required>
-                    <NumberInputRoot name="amount" defaultValue="0" w="full">
-                      <NumberInputField type="number" inputMode="numeric" pattern={undefined} />
-                    </NumberInputRoot>
+                    <Input
+                      type="number"
+                      inputMode="numeric"
+                      name="amount"
+                      defaultValue="0"
+                      w="full"
+                    />
                   </Field>
                   <Field label="Description">
                     <Textarea name="description" rows={5} />
