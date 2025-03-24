@@ -71,7 +71,7 @@ export const TransactionForm: FC<TransactionFormProps> = ({ action }) => {
                   <Field label="Amount" required>
                     <Input
                       type="number"
-                      inputMode="numeric"
+                      inputMode="decimal"
                       name="amount"
                       defaultValue="0"
                       w="full"
