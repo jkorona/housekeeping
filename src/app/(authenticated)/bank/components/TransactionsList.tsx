@@ -50,7 +50,12 @@ export const TransactionsList: FC<TransactionsListProps> = async ({
           {rows.map((row) => (
             <Table.Row key={row.id}>
               <Table.Cell>
-                {format(row.createdAt, "cccc dd MMMM yyyy hh:mm")}
+                <Text hideBelow="md">
+                  {format(row.createdAt, "cccc dd MMMM yyyy hh:mm")}
+                </Text>
+                <Text hideFrom="md">
+                  {format(row.createdAt, "d MMM yyyy")}
+                </Text>
               </Table.Cell>
               <Table.Cell>{row.description}</Table.Cell>
               <Table.Cell textAlign="end">

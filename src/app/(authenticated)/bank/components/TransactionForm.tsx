@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, FormEvent } from "react";
+import React, { FC, FormEvent, useState } from "react";
 import { LuPlus } from "react-icons/lu";
 import {
   Button,
@@ -25,7 +25,12 @@ const animation = {
 const SaveButton = () => {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" variant="surface" loading={pending}>
+    <Button
+      type="submit"
+      variant="surface"
+      loading={pending}
+      disabled={pending}
+    >
       Save
     </Button>
   );
@@ -37,15 +42,25 @@ export type TransactionFormProps = {
 
 export const TransactionForm: FC<TransactionFormProps> = ({ action }) => {
   const { open, onToggle } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    if (submitting) {
+      return;
+    }
+    setSubmitting(true);
 
+    const formData = new FormData(e.currentTarget);
     const amount = parseFloat(formData.get("amount") as string);
     const description = formData.get("description") as string;
 
-    await action(amount, description);
-    onToggle();
+    try {
+      await action(amount, description);
+    } finally {
+      onToggle();
+      setSubmitting(false);
+    }
   };
   return (
     <Stack alignItems="flex-end" marginBottom="4">
