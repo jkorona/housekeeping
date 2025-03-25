@@ -3,15 +3,9 @@
 import { FC } from "react";
 import { Button, Grid, GridItem } from "@chakra-ui/react";
 import { LuArrowLeft, LuArrowRight, LuCalendarDays } from "react-icons/lu";
-import {
-  addDays,
-  endOfWeek,
-  format,
-  isToday,
-  startOfWeek,
-  subDays,
-} from "date-fns";
+import { addDays, addWeeks, isToday, subDays, subWeeks } from "date-fns";
 import { DatePicker } from "@/components/ui/date-picker";
+import { formatLongDate, formatWeek } from "@/model/Formats";
 
 export type WeekdaySwitcherProps = {
   date: Date;
@@ -25,10 +19,10 @@ export const DateSwitcher: FC<WeekdaySwitcherProps> = ({
   onChange,
 }) => {
   const handlePrevDay = () => {
-    onChange(subDays(date, 1));
+    onChange(mode === "date" ? subDays(date, 1) : subWeeks(date, 1));
   };
   const handleNextDay = () => {
-    onChange(addDays(date, 1));
+    onChange(mode === "date" ? addDays(date, 1) : addWeeks(date, 1));
   };
 
   return (
@@ -63,15 +57,8 @@ export const DateSwitcher: FC<WeekdaySwitcherProps> = ({
               _hover={{ textDecoration: "underline" }}
             >
               <LuCalendarDays />
-              {mode === "date" && format(date, "cccc dd MMMM yyyy")}
-              {mode === "week" &&
-                `${format(
-                  startOfWeek(date, { weekStartsOn: 1 }),
-                  "dd MMMM yyyy"
-                )} - ${format(
-                  endOfWeek(date, { weekStartsOn: 1 }),
-                  "dd MMMM yyyy"
-                )}`}
+              {mode === "date" && formatLongDate(date)}
+              {mode === "week" && formatWeek(date)}
             </Button>
           }
         />

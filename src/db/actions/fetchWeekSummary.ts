@@ -9,14 +9,19 @@ export type MembersWeekSummary = {
   completed: number;
   all: number;
   progress: number;
-  award: number;
+  payment: number;
 };
-export type WeekSummary = MembersWeekSummary[];
+export type WeekSummary = {
+  startDate: Date;
+  endDate: Date;
+  closed: boolean;
+  results: MembersWeekSummary[];
+};
 
 const calculateScore = (
   logs: Log[],
   rate: number
-): Pick<MembersWeekSummary, "completed" | "all" | "progress" | "award"> => {
+): Pick<MembersWeekSummary, "completed" | "all" | "progress" | "payment"> => {
   const { completed, all } = logs.reduce(
     (result, log) => {
       if (log.skip) {
@@ -29,8 +34,8 @@ const calculateScore = (
     { completed: 0, all: 6 }
   );
   const progress = Math.floor((100 * completed) / all);
-  const award = Math.floor(progress < 50 ? 0 : rate * (progress / 100));
-  return { completed, all, progress, award };
+  const payment = Math.floor(progress < 50 ? 0 : rate * (progress / 100));
+  return { completed, all, progress, payment };
 };
 
 export const fetchWeekSummary = async (
@@ -50,10 +55,15 @@ export const fetchWeekSummary = async (
     orderBy: ({ dateOfBirth }, { asc }) => asc(dateOfBirth),
   });
 
-  return membersWithLogs.map((item) => ({
-    id: item.id,
-    name: item.name,
-    color: item.color,
-    ...calculateScore(item.logs ?? [], item.rate),
-  }));
+  return {
+    startDate,
+    endDate,
+    closed: false,
+    results: membersWithLogs.map((item) => ({
+      id: item.id,
+      name: item.name,
+      color: item.color,
+      ...calculateScore(item.logs ?? [], item.rate),
+    })),
+  };
 };

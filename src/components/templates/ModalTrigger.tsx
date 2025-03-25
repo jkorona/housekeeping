@@ -1,3 +1,4 @@
+"use client";
 import { useState, ReactNode, FC } from "react";
 import { Button, DialogRoot, DialogRootProps } from "@chakra-ui/react";
 import { DialogTrigger } from "../ui/dialog";

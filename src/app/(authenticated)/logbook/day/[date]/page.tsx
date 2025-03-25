@@ -47,9 +47,9 @@ export default async function DaySchedulePage({
       <HStack
         justifyContent="flex-end"
         gridColumn="span 2"
-        gap="2"
+        gap="4"
         paddingTop="3"
-        paddingRight="8"
+        paddingRight="6"
       >
         <Text textStyle="xs" fontWeight="semibold">Done</Text>
         <Text textStyle="xs" fontWeight="semibold">Skip</Text>
