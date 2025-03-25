@@ -36,6 +36,7 @@ export function ModalForm<T>({
 }: ModalFormProps<T>) {
   const { setOpen } = useDialogContext();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    "use server";
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);

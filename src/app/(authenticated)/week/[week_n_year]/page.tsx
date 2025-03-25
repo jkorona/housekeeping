@@ -1,7 +1,7 @@
 import { fetchWeekSummary } from "@/db/actions/fetchWeekSummary";
 import MembersProgress from "./component/MembersProgress";
 import CloseWeek from "./component/CloseWeek";
-import { Stack } from "@chakra-ui/react";
+import { Stack, Text } from "@chakra-ui/react";
 
 export type WeekPageProps = {
   params: Promise<{ week_n_year: string }>;
@@ -16,7 +16,11 @@ export default async function WeekPage({ params }: WeekPageProps) {
   return (
     <Stack gap="4">
       <MembersProgress summary={summary} />
-      {!summary.closed && <CloseWeek summary={summary} />}
+      {!summary.closed ? (
+        <CloseWeek summary={summary} />
+      ) : (
+        <Text color="green.600">Week closed!</Text>
+      )}
     </Stack>
   );
 }

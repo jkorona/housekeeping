@@ -2,10 +2,9 @@ import { db } from "@/db";
 import { FC } from "react";
 import { MemberBalance } from "./MemberBalance";
 import { TransactionForm } from "./TransactionForm";
-import { fetchMemberBalance } from "@/db/actions/fetchMemberBalance";
-import { transactions } from "@/db/schema/bank";
 import { revalidatePath } from "next/cache";
 import { TransactionsList } from "./TransactionsList";
+import { postTransaction } from "@/db/actions/postTransaction";
 
 export type AccountPageProps = {
   accountId: number;
@@ -28,13 +27,7 @@ export const AccountPage: FC<AccountPageProps> = async ({
       <TransactionForm
         action={async (amount, description) => {
           "use server";
-          const total = (await fetchMemberBalance(accountId)).at(0)?.total ?? 0;
-          await db.insert(transactions).values({
-            accountId,
-            amount,
-            description,
-            total: total + amount,
-          });
+          await postTransaction(accountId, amount, description);
           revalidatePath("/bank");
           revalidatePath(`/bank/account/${accountId}`);
         }}

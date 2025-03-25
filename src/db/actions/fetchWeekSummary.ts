@@ -46,24 +46,38 @@ export const fetchWeekSummary = async (
   const startDate = startOfISOWeek(weekDate);
   const endDate = endOfISOWeek(weekDate);
 
-  const membersWithLogs = await db.query.members.findMany({
-    with: {
-      logs: {
-        where: ({ date }, { between }) => between(date, startDate, endDate),
-      },
-    },
-    orderBy: ({ dateOfBirth }, { asc }) => asc(dateOfBirth),
+  const report = await db.query.weeklyReports.findFirst({
+    where: (fields, { and, eq }) =>
+      and(eq(fields.startDate, startDate), eq(fields.endDate, endDate)),
   });
 
-  return {
-    startDate,
-    endDate,
-    closed: false,
-    results: membersWithLogs.map((item) => ({
-      id: item.id,
-      name: item.name,
-      color: item.color,
-      ...calculateScore(item.logs ?? [], item.rate),
-    })),
-  };
+  if (report) {
+    return {
+      startDate,
+      endDate,
+      closed: true,
+      results: report.summary,
+    };
+  } else {
+    const membersWithLogs = await db.query.members.findMany({
+      with: {
+        logs: {
+          where: ({ date }, { between }) => between(date, startDate, endDate),
+        },
+      },
+      orderBy: ({ dateOfBirth }, { asc }) => asc(dateOfBirth),
+    });
+
+    return {
+      startDate,
+      endDate,
+      closed: false,
+      results: membersWithLogs.map((item) => ({
+        id: item.id,
+        name: item.name,
+        color: item.color,
+        ...calculateScore(item.logs ?? [], item.rate),
+      })),
+    };
+  }
 };

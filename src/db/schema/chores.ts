@@ -9,7 +9,9 @@ import {
   text,
   integer,
   primaryKey,
+  json,
 } from "drizzle-orm/pg-core";
+import { MembersWeekSummary } from "../actions/fetchWeekSummary";
 
 export const chores = pgTable("chores", {
   id: serial().primaryKey(),
@@ -88,9 +90,10 @@ export const logsRelations = relations(logs, ({ one }) => ({
 
 export const weeklyReports = pgTable("weekly_reports", {
   id: serial().primaryKey(),
-  year: integer().notNull(),
-  week: integer().notNull(),
+  startDate: date("start_date", { mode: "date" }).notNull(),
+  endDate: date("end_date", { mode: "date" }).notNull(),
   closed: boolean().notNull().default(true),
+  summary: json().$type<MembersWeekSummary[]>().notNull(),
 });
 
 export type Member = InferInsertModel<typeof members>;

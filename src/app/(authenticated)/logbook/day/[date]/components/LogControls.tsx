@@ -23,9 +23,10 @@ export const LogControls: FC<LogControlsProps> = ({ log, onChange }) => {
     try {
       await onChange(done, skip);
     } catch {
-      toaster.error({
+      toaster.create({
         title: "Connection error",
         description: "Failed to save data in storage.",
+        type: "error",
       });
     }
   };

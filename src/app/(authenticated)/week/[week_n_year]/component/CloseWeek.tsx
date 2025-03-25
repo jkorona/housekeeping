@@ -13,6 +13,7 @@ import { LuCircleCheck, LuCircleX, LuTrophy } from "react-icons/lu";
 import { ModalForm } from "@/components/templates/ModalForm";
 import { formatWeek } from "@/model/Formats";
 import { completeWeek } from "@/db/actions/completeWeek";
+import { revalidatePath } from "next/cache";
 
 interface CompleteWeekProps {
   summary: WeekSummary;
@@ -25,7 +26,14 @@ const CloseWeek: FC<CompleteWeekProps> = ({ summary }) => {
         <ModalForm
           value={summary}
           submitLabel="Complete"
-          onSubmit={completeWeek}
+          onSubmit={async () => {
+            "use server";
+            try {
+              await completeWeek(summary);
+            } finally {
+              revalidatePath("/week/[week_n_year]");
+            }
+          }}
           header={
             <HStack gap="4">
               <Heading as="h5">{formatWeek(summary.startDate)}</Heading>
