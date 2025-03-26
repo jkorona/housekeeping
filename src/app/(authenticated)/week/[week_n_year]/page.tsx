@@ -19,7 +19,14 @@ export default async function WeekPage({ params }: WeekPageProps) {
       {!summary.closed ? (
         <CloseWeek summary={summary} />
       ) : (
-        <Text color="green.600">Week closed!</Text>
+        <Text
+          fontWeight="semibold"
+          color="green.600"
+          text-align="right"
+          paddingInline="4"
+        >
+          Week closed!
+        </Text>
       )}
     </Stack>
   );
