@@ -13,8 +13,8 @@ export type MembersWeekSummary = {
   payment: number;
 };
 export type WeekSummary = {
-  startDate: Date;
-  endDate: Date;
+  week: number;
+  year: number;
   closed: boolean;
   results: MembersWeekSummary[];
 };
@@ -49,13 +49,13 @@ export const fetchWeekSummary = async (
 
   const report = await db.query.weeklyReports.findFirst({
     where: (fields, { and, eq }) =>
-      and(eq(fields.startDate, startDate), eq(fields.endDate, endDate)),
+      and(eq(fields.week, week), eq(fields.year, year)),
   });
 
   if (report) {
     return {
-      startDate,
-      endDate,
+      week,
+      year,
       closed: true,
       results: report.summary,
     };
@@ -70,8 +70,8 @@ export const fetchWeekSummary = async (
     });
 
     return {
-      startDate,
-      endDate,
+      week,
+      year,
       closed: false,
       results: membersWithLogs.map((item) => ({
         id: item.id,

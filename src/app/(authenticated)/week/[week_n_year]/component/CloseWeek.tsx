@@ -20,6 +20,7 @@ interface CompleteWeekProps {
 }
 
 const CloseWeek: FC<CompleteWeekProps> = ({ summary }) => {
+  const { week, year } = summary;
   return (
     <HStack justifyContent="flex-end">
       <ModalTrigger icon={<LuTrophy />} label="Complete week">
@@ -36,7 +37,7 @@ const CloseWeek: FC<CompleteWeekProps> = ({ summary }) => {
           }}
           header={
             <HStack gap="4">
-              <Heading as="h5">{formatWeek(summary.startDate)}</Heading>
+              <Heading as="h5">{formatWeek({ week, year })}</Heading>
               <Icon size="2xl" color="green.500">
                 <LuTrophy />
               </Icon>

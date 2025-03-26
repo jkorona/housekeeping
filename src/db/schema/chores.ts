@@ -90,8 +90,8 @@ export const logsRelations = relations(logs, ({ one }) => ({
 
 export const weeklyReports = pgTable("weekly_reports", {
   id: serial().primaryKey(),
-  startDate: date("start_date", { mode: "date" }).notNull(),
-  endDate: date("end_date", { mode: "date" }).notNull(),
+  week: integer().notNull(),
+  year: integer().notNull(),
   closed: boolean().notNull().default(true),
   summary: json().$type<MembersWeekSummary[]>().notNull(),
 });
