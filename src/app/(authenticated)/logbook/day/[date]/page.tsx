@@ -1,11 +1,12 @@
 import { db } from "@/db";
 import { Fragment } from "react";
-import { compareAsc, format, parse } from "date-fns";
+import { compareAsc, format, getWeek, getYear, parse } from "date-fns";
 import { revalidatePath } from "next/cache";
 import { logs, WeekDay } from "@/db/schema/chores";
-import { Grid, GridItem, HStack, Tag, Text } from "@chakra-ui/react";
+import { Container, Grid, GridItem, HStack, Tag, Text } from "@chakra-ui/react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { LogControls } from "./components/LogControls";
+import { WeekSummary } from "@/app/(authenticated)/week/[week_n_year]/component/WeekSummary";
 
 type DaySchedulePageProps = {
   params: Promise<{ date: string }>;
@@ -38,6 +39,14 @@ export default async function DaySchedulePage({
     where: (logs, { eq }) => eq(logs.date, dateObject),
   });
 
+  if (weekDay === "sunday") {
+    return (
+      <Container marginBlock="7">
+        <WeekSummary week={getWeek(dateObject, { weekStartsOn: 1 })} year={getYear(dateObject)} />
+      </Container>
+    );
+  }
+
   if (dayAssignments.length === 0) {
     return <EmptyState />;
   }
@@ -51,8 +60,12 @@ export default async function DaySchedulePage({
         paddingTop="3"
         paddingRight="6"
       >
-        <Text textStyle="xs" fontWeight="semibold">Done</Text>
-        <Text textStyle="xs" fontWeight="semibold">Skip</Text>
+        <Text textStyle="xs" fontWeight="semibold">
+          Done
+        </Text>
+        <Text textStyle="xs" fontWeight="semibold">
+          Skip
+        </Text>
       </HStack>
       {dayAssignments
         .sort((a, b) => compareAsc(a.member.dateOfBirth, b.member.dateOfBirth))
