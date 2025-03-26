@@ -1,4 +1,4 @@
-import { WeekSummary } from "./component/WeekSummary";
+import { WeekSummary } from "../../component/WeekSummary";
 
 export type WeekPageProps = {
   params: Promise<{ week_n_year: string }>;

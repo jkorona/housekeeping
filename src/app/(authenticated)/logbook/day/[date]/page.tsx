@@ -2,11 +2,11 @@ import { db } from "@/db";
 import { Fragment } from "react";
 import { compareAsc, format, getWeek, getYear, parse } from "date-fns";
 import { revalidatePath } from "next/cache";
-import { logs, WeekDay } from "@/db/schema/chores";
 import { Container, Grid, GridItem, HStack, Tag, Text } from "@chakra-ui/react";
+import { logs, WeekDay } from "@/db/schema/chores";
 import { EmptyState } from "@/components/ui/empty-state";
+import { WeekSummary } from "@/app/(authenticated)/component/WeekSummary";
 import { LogControls } from "./components/LogControls";
-import { WeekSummary } from "@/app/(authenticated)/week/[week_n_year]/component/WeekSummary";
 
 type DaySchedulePageProps = {
   params: Promise<{ date: string }>;
@@ -42,7 +42,10 @@ export default async function DaySchedulePage({
   if (weekDay === "sunday") {
     return (
       <Container marginBlock="7">
-        <WeekSummary week={getWeek(dateObject, { weekStartsOn: 1 })} year={getYear(dateObject)} />
+        <WeekSummary
+          week={getWeek(dateObject, { weekStartsOn: 1 })}
+          year={getYear(dateObject)}
+        />
       </Container>
     );
   }
