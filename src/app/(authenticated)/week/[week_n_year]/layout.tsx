@@ -1,15 +1,16 @@
 import { PropsWithChildren } from "react";
 import { redirect } from "next/navigation";
-import { format, parse } from "date-fns";
+import { format } from "date-fns";
 import { Container } from "@chakra-ui/react";
 import { DateSwitcher } from "@/components/controls/DateSwitcher";
+import { parseWeek } from "@/model/DateUtils";
 
 export default async function LogbookLayout({
   children,
   params,
 }: PropsWithChildren<{ params: Promise<{ week_n_year: string }> }>) {
   const { week_n_year } = await params;
-  const dateObject = parse(week_n_year, "I-R", new Date());
+  const dateObject = parseWeek(week_n_year);
 
   return (
     <>

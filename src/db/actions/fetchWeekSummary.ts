@@ -1,6 +1,7 @@
-import { endOfISOWeek, setISOWeek, startOfISOWeek } from "date-fns";
+import { endOfISOWeek, startOfISOWeek, startOfWeek } from "date-fns";
 import { db } from "..";
 import { Log } from "../schema/chores";
+import { weekToDate } from "@/model/DateUtils";
 
 export type MembersWeekSummary = {
   id: number;
@@ -42,7 +43,7 @@ export const fetchWeekSummary = async (
   week: number,
   year: number
 ): Promise<WeekSummary> => {
-  const weekDate = setISOWeek(new Date(year, 1, 1), week);
+  const weekDate = weekToDate(week, year);
   const startDate = startOfISOWeek(weekDate);
   const endDate = endOfISOWeek(weekDate);
 
