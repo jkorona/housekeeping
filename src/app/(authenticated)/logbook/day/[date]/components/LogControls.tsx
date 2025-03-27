@@ -21,6 +21,8 @@ export const LogControls: FC<LogControlsProps> = ({ log, onChange }) => {
 
   const save = async (done: boolean, skip: boolean) => {
     try {
+      setChecked(done);
+      setSkipped(skip);
       await onChange(done, skip);
     } catch {
       toaster.create({
