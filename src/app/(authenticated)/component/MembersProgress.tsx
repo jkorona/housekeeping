@@ -39,7 +39,7 @@ const MembersProgress: FC<MembersProgressProps> = ({ summary }) => {
                 defaultValue={progress}
                 colorPalette={progress < 50 ? "red" : "green"}
                 animated={!summary.closed}
-                striped
+                striped={!summary.closed}
               >
                 <Progress.Track flex="1" borderRadius="l3">
                   <Progress.Range />
