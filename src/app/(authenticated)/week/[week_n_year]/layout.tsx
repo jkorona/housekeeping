@@ -1,9 +1,10 @@
 import { PropsWithChildren } from "react";
 import { redirect } from "next/navigation";
-import { format } from "date-fns";
+import { addWeeks, format, subWeeks } from "date-fns";
 import { Container } from "@chakra-ui/react";
 import { DateSwitcher } from "@/components/controls/DateSwitcher";
 import { parseWeek } from "@/model/DateUtils";
+import { Preload } from "@/components/controls/Preload";
 
 export default async function LogbookLayout({
   children,
@@ -20,6 +21,8 @@ export default async function LogbookLayout({
         borderBottomWidth="medium"
         borderBottomColor="green.700"
       >
+        <Preload url={`/week/${format(addWeeks(dateObject, 1), "I-R")}`} />
+        <Preload url={`/week/${format(subWeeks(dateObject, 1), "I-R")}`} />
         <DateSwitcher
           date={dateObject}
           mode="week"
