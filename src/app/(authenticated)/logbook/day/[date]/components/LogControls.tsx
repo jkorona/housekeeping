@@ -35,12 +35,12 @@ export const LogControls: FC<LogControlsProps> = ({ log, onChange }) => {
 
   const handleDoneChange = async (event: CheckboxCheckedChangeDetails) => {
     setChecked(!!event.checked);
-    save(!!event.checked, log?.skip ?? false);
+    await save(!!event.checked, log?.skip ?? false);
   };
 
   const handleSkipChange = async (event: CheckboxCheckedChangeDetails) => {
     setSkipped(!!event.checked);
-    save(log?.done ?? false, !!event.checked);
+    await save(log?.done ?? false, !!event.checked);
   };
 
   return (
