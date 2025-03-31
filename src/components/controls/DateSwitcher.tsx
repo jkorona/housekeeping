@@ -70,7 +70,7 @@ export const DateSwitcher: FC<WeekdaySwitcherProps> = ({
           selected={date}
           maxDate={new Date()}
           calendarStartDay={1}
-          todayButton
+          todayButton="Today"
           showMonthDropdown
           showWeekNumbers={mode === "week"}
           showWeekPicker={mode === "week"}
