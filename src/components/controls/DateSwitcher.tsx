@@ -1,30 +1,52 @@
 "use client";
-
 import { FC } from "react";
-import { Button, Grid, GridItem } from "@chakra-ui/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  format,
+  addDays,
+  addWeeks,
+  isToday,
+  subDays,
+  subWeeks,
+} from "date-fns";
 import { LuArrowLeft, LuArrowRight, LuCalendarDays } from "react-icons/lu";
-import { addDays, addWeeks, isToday, subDays, subWeeks } from "date-fns";
+import { Button, Grid, GridItem } from "@chakra-ui/react";
 import { DatePicker } from "@/components/ui/date-picker";
 import { formatLongDate, formatWeek } from "@/model/Formats";
 
 export type WeekdaySwitcherProps = {
   date: Date;
+  baseUrl: string;
   mode?: "date" | "week";
-  onChange: (date: Date) => void;
 };
+
+const formatDate = (date: Date, mode: "date" | "week") =>
+  format(date, mode === "date" ? "yyyy-MM-dd" : "I-R");
+
+const dateUrl = (baseUrl: string, current: Date, mode: "date" | "week") =>
+  `${baseUrl}/${formatDate(current, mode)}`;
+
+const nextPageUrl = (baseUrl: string, current: Date, mode: "date" | "week") =>
+  dateUrl(
+    baseUrl,
+    mode === "date" ? addDays(current, 1) : addWeeks(current, 1),
+    mode
+  );
+
+const prevPageUrl = (baseUrl: string, current: Date, mode: "date" | "week") =>
+  dateUrl(
+    baseUrl,
+    mode === "date" ? subDays(current, 1) : subWeeks(current, 1),
+    mode
+  );
 
 export const DateSwitcher: FC<WeekdaySwitcherProps> = ({
   date,
   mode = "date",
-  onChange,
+  baseUrl,
 }) => {
-  const handlePrevDay = () => {
-    onChange(mode === "date" ? subDays(date, 1) : subWeeks(date, 1));
-  };
-  const handleNextDay = () => {
-    onChange(mode === "date" ? addDays(date, 1) : addWeeks(date, 1));
-  };
-
+  const router = useRouter();
   return (
     <Grid gridTemplateColumns="min-content 1fr min-content" alignItems="center">
       <GridItem justifySelf="flex-start" asChild>
@@ -36,9 +58,11 @@ export const DateSwitcher: FC<WeekdaySwitcherProps> = ({
           p="0"
           borderRadius={100}
           variant="outline"
-          onClick={handlePrevDay}
+          asChild
         >
-          <LuArrowLeft />
+          <Link href={prevPageUrl(baseUrl, date, mode)}>
+            <LuArrowLeft />
+          </Link>
         </Button>
       </GridItem>
       <GridItem justifySelf="center" position="relative">
@@ -46,10 +70,11 @@ export const DateSwitcher: FC<WeekdaySwitcherProps> = ({
           selected={date}
           maxDate={new Date()}
           calendarStartDay={1}
+          todayButton
           showMonthDropdown
           showWeekNumbers={mode === "week"}
           showWeekPicker={mode === "week"}
-          onChange={(date) => onChange(date!)}
+          onChange={(date) => router.push(dateUrl(baseUrl, date!, mode))}
           customInput={
             <Button
               variant="plain"
@@ -73,9 +98,10 @@ export const DateSwitcher: FC<WeekdaySwitcherProps> = ({
           variant="outline"
           borderRadius={100}
           disabled={isToday(date)}
-          onClick={handleNextDay}
         >
-          <LuArrowRight />
+          <Link href={nextPageUrl(baseUrl, date, mode)}>
+            <LuArrowRight />
+          </Link>
         </Button>
       </GridItem>
     </Grid>
