@@ -16,13 +16,13 @@ export type LogControlsProps = {
 };
 
 export const LogControls: FC<LogControlsProps> = ({ log, onChange }) => {
-  const [checked, setChecked] = useState(log?.done);
-  const [skipped, setSkipped] = useState(log?.skip);
+  const [done, setDone] = useState(log?.done ?? false);
+  const [skip, setSkip] = useState(log?.skip ?? false);
 
   const save = async (done: boolean, skip: boolean) => {
     try {
-      setChecked(done);
-      setSkipped(skip);
+      setDone(done);
+      setSkip(skip);
       await onChange(done, skip);
     } catch {
       toaster.create({
@@ -34,30 +34,30 @@ export const LogControls: FC<LogControlsProps> = ({ log, onChange }) => {
   };
 
   const handleDoneChange = async (event: CheckboxCheckedChangeDetails) => {
-    setChecked(!!event.checked);
-    await save(!!event.checked, log?.skip ?? false);
+    setDone(!!event.checked);
+    await save(!!event.checked, skip);
   };
 
   const handleSkipChange = async (event: CheckboxCheckedChangeDetails) => {
-    setSkipped(!!event.checked);
-    await save(log?.done ?? false, !!event.checked);
+    setSkip(!!event.checked);
+    await save(done, !!event.checked);
   };
 
   return (
     <HStack gap="2">
       <Checkbox.Root
-        checked={checked}
-        disabled={skipped}
+        checked={done}
+        disabled={skip}
         onCheckedChange={handleDoneChange}
         size="lg"
       >
         <Checkbox.HiddenInput name="done" />
-        <Checkbox.Control>{checked && <LuCheck />}</Checkbox.Control>
+        <Checkbox.Control>{done && <LuCheck />}</Checkbox.Control>
       </Checkbox.Root>
       <Switch.Root
         size="lg"
-        checked={skipped}
-        disabled={checked}
+        checked={skip}
+        disabled={done}
         onCheckedChange={handleSkipChange}
       >
         <Switch.HiddenInput name="skip" />
