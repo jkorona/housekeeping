@@ -12,6 +12,7 @@ export type MembersWeekSummary = {
   progress: number;
   payment: number;
 };
+
 export type WeekSummary = {
   week: number;
   year: number;

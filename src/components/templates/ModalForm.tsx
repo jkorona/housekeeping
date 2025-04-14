@@ -48,7 +48,7 @@ export function ModalForm<T>({
     setOpen(false);
   };
   return (
-    <DialogContent asChild>
+    <DialogContent asChild maxHeight="-webkit-fill-available">
       <form onSubmit={handleSubmit}>
         <DialogHeader>{header}</DialogHeader>
         <DialogBody>{children}</DialogBody>
