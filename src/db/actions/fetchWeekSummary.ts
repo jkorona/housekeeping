@@ -1,4 +1,4 @@
-import { endOfISOWeek, startOfISOWeek } from "date-fns";
+import { endOfISOWeek, isPast, isSameDay, startOfISOWeek } from "date-fns";
 import { db } from "..";
 import { Log } from "../schema/chores";
 import { weekToDate } from "@/model/DateUtils";
@@ -11,6 +11,7 @@ export type MembersWeekSummary = {
   all: number;
   progress: number;
   payment: number;
+  dailyCompletion: (boolean | null)[];
 };
 
 export type WeekSummary = {
@@ -31,13 +32,40 @@ const calculateScore = (
       } else if (log.done) {
         result.completed += 1;
       }
+
       return result;
     },
     { completed: 0, all: 6 }
   );
   const progress = Math.floor((100 * completed) / all);
   const payment = Math.floor(progress < 50 ? 0 : rate * (progress / 100));
+
   return { completed, all, progress, payment };
+};
+
+const calculateDailyCompletion = (
+  startDate: Date,
+  logs: Log[]
+): (boolean | null)[] => {
+  const dailyCompletion: (boolean | null)[] = [];
+
+  for (let i = 0; i < 7; i++) {
+    const currentDate = new Date(startDate);
+    currentDate.setDate(currentDate.getDate() + i);
+    const log = logs.find((log) => isSameDay(log.date, currentDate));
+    if (log) {
+      if (log.skip) {
+        dailyCompletion.push(null);
+      } else if (log.done) {
+        dailyCompletion.push(true);
+      } else {
+        dailyCompletion.push(false);
+      }
+    } else if (isPast(currentDate)) {
+      dailyCompletion.push(false);
+    }
+  }
+  return dailyCompletion;
 };
 
 export const fetchWeekSummary = async (
@@ -78,6 +106,7 @@ export const fetchWeekSummary = async (
         id: item.id,
         name: item.name,
         color: item.color,
+        dailyCompletion: calculateDailyCompletion(startDate, item.logs ?? []),
         ...calculateScore(item.logs ?? [], item.rate),
       })),
     };
