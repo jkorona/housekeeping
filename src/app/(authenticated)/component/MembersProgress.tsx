@@ -1,6 +1,14 @@
 import React, { FC } from "react";
 import { WeekSummary } from "@/db/actions/fetchWeekSummary";
-import { FormatNumber, Grid, GridItem, Progress, Tag, Text } from "@chakra-ui/react";
+import {
+  FormatNumber,
+  Grid,
+  GridItem,
+  Icon,
+  Progress,
+  Tag,
+  Text,
+} from "@chakra-ui/react";
 import { RxDot, RxDotFilled } from "react-icons/rx";
 
 type MembersProgressProps = {
@@ -9,17 +17,36 @@ type MembersProgressProps = {
 
 const renderDayStatus = (day: boolean | null | undefined) => {
   if (day === undefined) {
-    return <RxDot size={32} />;
+    return <RxDot />;
   }
   if (day === null) {
-    return <RxDotFilled size={32} color="gray" />;
+    return <RxDotFilled color="gray" />;
   }
   return day ? (
-    <RxDotFilled size={32} color="green" />
+    <RxDotFilled color="green" />
   ) : (
-    <RxDotFilled size={32} color="red" />
+    <RxDotFilled color="red" />
   );
 };
+
+function renderLegacyProgress(
+  progress: number,
+  closed: boolean
+): React.ReactNode {
+  return (
+    <Progress.Root
+      size="lg"
+      defaultValue={progress}
+      colorPalette={progress < 50 ? "red" : "green"}
+      animated={!closed}
+      striped={!closed}
+    >
+      <Progress.Track flex="1" borderRadius="l3">
+        <Progress.Range />
+      </Progress.Track>
+    </Progress.Root>
+  );
+}
 
 const MembersProgress: FC<MembersProgressProps> = ({ summary }) => {
   return (
@@ -29,7 +56,16 @@ const MembersProgress: FC<MembersProgressProps> = ({ summary }) => {
       alignItems="center"
     >
       {summary.results.map(
-        ({ id, name, color, completed, all, payment, progress, dailyCompletion }) => {
+        ({
+          id,
+          name,
+          color,
+          completed,
+          all,
+          payment,
+          progress,
+          dailyCompletion,
+        }) => {
           return (
             <React.Fragment key={id}>
               <GridItem>
@@ -44,17 +80,7 @@ const MembersProgress: FC<MembersProgressProps> = ({ summary }) => {
               </GridItem>
               <GridItem padding="3">
                 {!dailyCompletion ? (
-                  <Progress.Root
-                    size="lg"
-                    defaultValue={progress}
-                    colorPalette={progress < 50 ? "red" : "green"}
-                    animated={!summary.closed}
-                    striped={!summary.closed}
-                  >
-                    <Progress.Track flex="1" borderRadius="l3">
-                      <Progress.Range />
-                    </Progress.Track>
-                  </Progress.Root>
+                  renderLegacyProgress(progress, summary.closed)
                 ) : (
                   <Grid gridTemplateColumns="repeat(6, 1fr)">
                     {Array.from({ length: 6 }, (_, i) => (
@@ -63,7 +89,9 @@ const MembersProgress: FC<MembersProgressProps> = ({ summary }) => {
                         alignSelf="center"
                         justifySelf="center"
                       >
-                        {renderDayStatus(dailyCompletion[i])}
+                        <Icon size={["sm", "md", "lg"]}>
+                          {renderDayStatus(dailyCompletion[i])}
+                        </Icon>
                       </GridItem>
                     ))}
                   </Grid>
