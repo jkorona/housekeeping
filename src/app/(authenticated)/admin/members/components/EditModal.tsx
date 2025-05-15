@@ -49,7 +49,7 @@ export const EditModal: FC<EditModalProps> = ({ title, value, onSave }) => {
   };
 
   return (
-    <DialogContent minH={["100vh", "unset"]} marginBlock={[0, 16]} asChild>
+    <DialogContent minH={["100dvh", "unset"]} marginBlock={[0, 16]} asChild>
       <form onSubmit={handleSubmit}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
