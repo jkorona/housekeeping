@@ -89,7 +89,7 @@ const MembersProgress: FC<MembersProgressProps> = ({ summary }) => {
                         alignSelf="center"
                         justifySelf="center"
                       >
-                        <Icon size={["sm", "md", "lg"]}>
+                        <Icon size={["md", "2xl"]}>
                           {renderDayStatus(dailyCompletion[i])}
                         </Icon>
                       </GridItem>
