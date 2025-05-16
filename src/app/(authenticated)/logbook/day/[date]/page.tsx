@@ -61,13 +61,10 @@ export default async function DaySchedulePage({
         gridColumn="span 2"
         gap="4"
         paddingTop="3"
-        paddingRight="6"
+        paddingRight="2.5"
       >
         <Text textStyle="xs" fontWeight="semibold">
           Done
-        </Text>
-        <Text textStyle="xs" fontWeight="semibold">
-          Skip
         </Text>
       </HStack>
       {dayAssignments

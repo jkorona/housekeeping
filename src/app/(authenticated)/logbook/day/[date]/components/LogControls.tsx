@@ -4,7 +4,6 @@ import {
   Checkbox,
   CheckboxCheckedChangeDetails,
   HStack,
-  Switch,
 } from "@chakra-ui/react";
 import { Log } from "@/db/schema/chores";
 import { LuCheck } from "react-icons/lu";
@@ -38,11 +37,6 @@ export const LogControls: FC<LogControlsProps> = ({ log, onChange }) => {
     await save(!!event.checked, skip);
   };
 
-  const handleSkipChange = async (event: CheckboxCheckedChangeDetails) => {
-    setSkip(!!event.checked);
-    await save(done, !!event.checked);
-  };
-
   return (
     <HStack gap="2">
       <Checkbox.Root
@@ -54,15 +48,6 @@ export const LogControls: FC<LogControlsProps> = ({ log, onChange }) => {
         <Checkbox.HiddenInput name="done" />
         <Checkbox.Control>{done && <LuCheck />}</Checkbox.Control>
       </Checkbox.Root>
-      <Switch.Root
-        size="lg"
-        checked={skip}
-        disabled={done}
-        onCheckedChange={handleSkipChange}
-      >
-        <Switch.HiddenInput name="skip" />
-        <Switch.Control />
-      </Switch.Root>
     </HStack>
   );
 };

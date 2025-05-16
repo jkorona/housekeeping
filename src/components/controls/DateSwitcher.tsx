@@ -98,6 +98,7 @@ export const DateSwitcher: FC<WeekdaySwitcherProps> = ({
           variant="outline"
           borderRadius={100}
           disabled={isToday(date)}
+          asChild
         >
           <Link href={nextPageUrl(baseUrl, date, mode)}>
             <LuArrowRight />
